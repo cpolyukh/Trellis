@@ -1,6 +1,10 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
     <string name="app_name">Trellis</string>
-
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <ImageView
+        name="logo"
+        android:src="@drawable/logo" />
+    <string name="title_activity_support_selection">SupportSelectionActivity</string>
 </resources>
+
