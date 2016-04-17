@@ -1,11 +1,14 @@
 package edu.uw.ischool.trellis;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
@@ -14,17 +17,34 @@ import edu.uw.ischool.trellis.UI.ToolbarView;
 
 public class LoginActivity extends AppCompatActivity {
 
+    Button loginButton;
+    Button guestButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.main);
-        ToolbarView toolbar = (ToolbarView) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        loginButton = (Button) findViewById(R.id.loginButton);
+        guestButton = (Button) findViewById(R.id.guestButton);
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(LoginActivity.this, SupportSelectionActivity.class);
+                startActivity(next);
+            }
+        });
+
+        guestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(LoginActivity.this, SupportSelectionActivity.class);
+                startActivity(next);
+            }
+        });
+
+
 
     }
-
-
-
 }

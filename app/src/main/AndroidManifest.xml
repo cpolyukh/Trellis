@@ -46,6 +46,11 @@
             android:label="@string/title_activity_conversation_starter"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name=".EditProfileActivity"
+            android:label="@string/title_activity_edit_profile"
+            android:theme="@style/AppTheme" >
+        </activity>
     </application>
 
 </manifest>

@@ -13,13 +13,13 @@
         android:layout_height="wrap_content"
         android:text="I Want to Give Support"
         android:layout_weight="0.5"
-        android:id="@+id/button3" />
+        android:id="@+id/giveSupportBtn" />
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
         android:text="I WANT TO SEEK SUPPORT"
-        android:id="@+id/button4" />
+        android:id="@+id/seekSupportBtn" />
 
 </LinearLayout>

@@ -61,14 +61,6 @@
         android:layout_toRightOf="@+id/imageView7"
         android:layout_toEndOf="@+id/imageView7" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -76,9 +68,10 @@
         android:text="I&apos;m sorry about that. Do you parents put a lot of pressure on you?"
         android:id="@+id/textView31"
         android:paddingLeft="100dp"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/textView30"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="35dp" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -93,15 +86,16 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageView9"
         android:src="@drawable/bubble"
-        android:layout_below="@+id/imageView8"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="25dp" />
+        android:layout_below="@+id/textView31"
+        android:layout_toLeftOf="@+id/textView30"
+        android:layout_toStartOf="@+id/textView30"
+        android:layout_marginTop="35dp" />
 
     <RelativeLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:gravity="bottom"
+        android:id="@+id/toolbarWrapper"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
         <android.support.v7.widget.Toolbar  xmlns:android="http://schemas.android.com/apk/res/android"
@@ -187,7 +181,17 @@
 
             </LinearLayout>
         </android.support.v7.widget.Toolbar>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText"
+            android:layout_above="@+id/toolbar"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="1dp" />
     </RelativeLayout>
+
 
 </RelativeLayout>
 
