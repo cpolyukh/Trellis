@@ -2,9 +2,11 @@
     <string name="app_name">Trellis</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <ImageView
-        name="logo"
-        android:src="@drawable/logo" />
     <string name="title_activity_support_selection">SupportSelectionActivity</string>
+    <string name="title_activity_learn_more">LearnMoreActivity</string>
+    <string name="title_activity_support">SupportActivity</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_messages">MessagesActivity</string>
+    <string name="title_activity_conversation_starter">ConversationStarterActivity</string>
 </resources>
 

@@ -1,0 +1,74 @@
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".LoginActivity"
+    android:orientation="vertical">
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="175dp"
+        android:id="@+id/support"
+        android:src="@drawable/support"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentRight="false"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:padding="0dp"
+        android:paddingLeft="0dp"
+        android:paddingTop="0dp"
+        android:paddingRight="0dp"
+        android:paddingBottom="0dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="10 Signs Your Friend Might Have Depression"
+        android:paddingBottom="25dp"
+        android:id="@+id/textView" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="175dp"
+        android:id="@+id/support1"
+        android:src="@drawable/support2"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentRight="false"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Breaking the Stigma"
+        android:paddingBottom="25dp"
+        android:id="@+id/textView2" />
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="175dp"
+        android:id="@+id/suppor2t"
+        android:src="@drawable/support3"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentRight="false"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Genetics and Depression"
+        android:paddingBottom="25dp"
+        android:id="@+id/textView3" />
+
+
+
+
+</LinearLayout>
