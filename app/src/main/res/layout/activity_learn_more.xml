@@ -1,74 +1,173 @@
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".LoginActivity"
-    android:orientation="vertical">
+    >
 
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="175dp"
-        android:id="@+id/support"
-        android:src="@drawable/support"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentRight="false"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp"
-        android:padding="0dp"
-        android:paddingLeft="0dp"
-        android:paddingTop="0dp"
-        android:paddingRight="0dp"
-        android:paddingBottom="0dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="10 Signs Your Friend Might Have Depression"
-        android:paddingBottom="25dp"
-        android:id="@+id/textView" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="175dp"
-        android:id="@+id/support1"
-        android:src="@drawable/support2"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentRight="false"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Breaking the Stigma"
-        android:paddingBottom="25dp"
-        android:id="@+id/textView2" />
-
-
-    <ImageView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="175dp"
-        android:id="@+id/suppor2t"
-        android:src="@drawable/support3"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentRight="false"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp"/>
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Genetics and Depression"
-        android:paddingBottom="25dp"
-        android:id="@+id/textView3" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="175dp"
+                android:id="@+id/support"
+                android:src="@drawable/support"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentRight="false"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="0dp"
+                android:padding="0dp"
+                android:paddingLeft="0dp"
+                android:paddingTop="0dp"
+                android:paddingRight="0dp"
+                android:paddingBottom="0dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="10 Signs Your Friend Might Have Depression"
+                android:paddingBottom="25dp"
+                android:id="@+id/textView" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="175dp"
+                android:id="@+id/support1"
+                android:src="@drawable/support2"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentRight="false"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="0dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Breaking the Stigma"
+                android:paddingBottom="25dp"
+                android:id="@+id/textView2" />
 
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="175dp"
+                android:id="@+id/suppor2t"
+                android:src="@drawable/support3"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentRight="false"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="0dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Genetics and Depression"
+                android:paddingBottom="25dp"
+                android:id="@+id/textView3" />
 
 
-</LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:gravity="bottom"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <android.support.v7.widget.Toolbar  xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#000000"
+            android:minHeight="?attr/actionBarSize"
+            app:contentInsetStart="0dp"
+            app:theme="@style/Base.Theme.AppCompat.CompactMenu" >
+
+            <LinearLayout
+                android:id="@+id/toolbarmenucontainer"
+                android:layout_width="match_parent"
+                android:weightSum="5"
+                android:layout_height="48dp"
+                android:background="@color/background_floating_material_light"
+                android:minHeight="?attr/actionBarSize"
+                app:contentInsetStart="0dp"
+                app:theme="@style/Base.Theme.AppCompat.CompactMenu"
+                android:orientation="horizontal" >
+
+                <ImageButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:id="@+id/supportIcon"
+                    android:clickable="true"
+                    android:scaleType="fitXY"
+                    android:background="@null"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:src="@drawable/people" />
+
+                <ImageButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/messageIcon"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:scaleType="fitXY"
+                    android:background="@null"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:src="@drawable/msg" />
+
+                <ImageButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/conversationIcon"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:scaleType="fitXY"
+                    android:background="@null"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:src="@drawable/convo" />
+
+                <ImageButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/readMoreIcon"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:scaleType="fitXY"
+                    android:background="@null"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:src="@drawable/articles" />
+
+                <ImageButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/settingsIcon"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:scaleType="fitXY"
+                    android:background="@null"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:src="@drawable/settings" />
+
+            </LinearLayout>
+        </android.support.v7.widget.Toolbar>
+    </RelativeLayout>
+
+</RelativeLayout>

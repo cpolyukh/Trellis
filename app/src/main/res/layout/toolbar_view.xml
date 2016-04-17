@@ -1,10 +1,15 @@
+<RelativeLayout
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:gravity="bottom"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <android.support.v7.widget.Toolbar  xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/material_blue_grey_800"
+        android:background="#000000"
         android:minHeight="?attr/actionBarSize"
         app:contentInsetStart="0dp"
         app:theme="@style/Base.Theme.AppCompat.CompactMenu" >
@@ -24,16 +29,18 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:id="@+id/supportIcon"
                 android:clickable="true"
                 android:scaleType="fitXY"
                 android:background="@null"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:src="@drawable/msg" />
+                android:src="@drawable/people" />
 
             <ImageButton
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:id="@+id/messageIcon"
                 android:layout_weight="1"
                 android:clickable="true"
                 android:scaleType="fitXY"
@@ -45,36 +52,39 @@
             <ImageButton
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:id="@+id/conversationIcon"
                 android:layout_weight="1"
                 android:clickable="true"
                 android:scaleType="fitXY"
                 android:background="@null"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:src="@drawable/msg" />
+                android:src="@drawable/convo" />
 
             <ImageButton
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:id="@+id/readMoreIcon"
                 android:layout_weight="1"
                 android:clickable="true"
                 android:scaleType="fitXY"
                 android:background="@null"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:src="@drawable/msg" />
+                android:src="@drawable/articles" />
 
             <ImageButton
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:id="@+id/settingsIcon"
                 android:layout_weight="1"
                 android:clickable="true"
                 android:scaleType="fitXY"
                 android:background="@null"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:src="@drawable/msg" />
+                android:src="@drawable/settings" />
 
         </LinearLayout>
-
     </android.support.v7.widget.Toolbar>
+</RelativeLayout>
