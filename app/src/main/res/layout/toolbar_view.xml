@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:weightSum="5"
             android:layout_height="48dp"
-            android:background="@color/material_blue_grey_800"
+            android:background="@color/background_floating_material_light"
             android:minHeight="?attr/actionBarSize"
             app:contentInsetStart="0dp"
             app:theme="@style/Base.Theme.AppCompat.CompactMenu"
