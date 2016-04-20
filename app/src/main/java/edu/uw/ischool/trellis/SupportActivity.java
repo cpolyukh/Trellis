@@ -30,10 +30,10 @@ public class SupportActivity extends AppCompatActivity {
         setContentView(R.layout.activity_support);
 
         //TODO: Fix this code! Almost working
-/*
+
         app = getApplication();
 
-        Intent launchingIntent = getIntent();
+        //Intent launchingIntent = getIntent();
 
         list = (ListView) findViewById(R.id.lstSupporters);
 
@@ -60,12 +60,12 @@ public class SupportActivity extends AppCompatActivity {
                 startActivity(next);
             }
         });
-*/
 
 
 
 
 
+/*
         TextView firstBox = (TextView) findViewById(R.id.textView8);
 
         firstBox.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +74,7 @@ public class SupportActivity extends AppCompatActivity {
                 Intent next = new Intent(SupportActivity.this, ProfileActivity.class);
                 startActivity(next);
             }
-        });
+        });*/
 
         /********************************************************/
         /********************** TOOLBAR SETUP *******************/
@@ -134,11 +134,11 @@ public class SupportActivity extends AppCompatActivity {
     //Used for testing since we don't have actual supporters yet. These are simply default supporters
     //used as an example of how supporters would be displayed
     private void addDefaultSupporters() {
-        Supporter newSupporter = new Supporter("Jen", "Nguyen", "&quot;Happy to just talk or grab some coffee! Don&apos;t be afraid to reach out :)&quot;");
+        Supporter newSupporter = new Supporter("Jen", "Nguyen", "\"Happy to just talk or grab some coffee! Don&apos;t be afraid to reach out :)\"");
         newSupporter.setSupporteeCount(10);
-        newSupporter = new Supporter("Ahn", "Nest", "&quot;I am always available to talk, message me at anytime!&quot;");
+        newSupporter = new Supporter("Ahn", "Nest", "\"I am always available to talk, message me at anytime!\"");
         newSupporter.setSupporteeCount(2);
-        newSupporter = new Supporter("Buttress", "Ofsupport", "&quot;I will support the life you want to build for yourself.&quot;");
+        newSupporter = new Supporter("Buttress", "Ofsupport", "\"I will support the life you want to build for yourself.\"");
         newSupporter.setSupporteeCount(0);
     }
 

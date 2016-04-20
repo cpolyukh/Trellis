@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Relative xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:layout_height="150dp"
     android:padding="6dip">
 
 
     <ImageView
         android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_height="fill_parent"
         android:id="@+id/supportIcon"
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:src="@drawable/user"
-        android:layout_marginTop="35dp" />
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -39,11 +40,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="&quot;Happy to just talk or grab some coffee! Don&apos;t be afraid to reach out :)&quot;"
         android:id="@+id/txtQuote"
         android:layout_below="@+id/txtSupporterName"
-        android:layout_toRightOf="@+id/txtSupporterName"
-        android:layout_toEndOf="@+id/txtSupporterName" />
+        android:layout_alignLeft="@+id/txtSupporterName"/>
 
-</Relative>
+</RelativeLayout>

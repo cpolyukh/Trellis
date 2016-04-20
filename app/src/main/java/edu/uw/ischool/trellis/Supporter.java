@@ -1,6 +1,8 @@
 package edu.uw.ischool.trellis;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -23,6 +25,10 @@ public class Supporter extends User {
     public Supporter(String firstName, String lastName, String quote, String bio) {
         super(firstName, lastName, quote, bio);
         supportees = new HashSet<SupportSeeker>();
+
+        if (allSupporters == null) {
+            allSupporters = new ArrayList<Supporter>();
+        }
         allSupporters.add(this);
     }
 

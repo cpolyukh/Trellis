@@ -32,7 +32,7 @@ public class SupporterArrayAdapter extends ArrayAdapter<Supporter> {
         ImageView imageView = (ImageView) rowView.findViewById(R.id.supportIcon);
 
         nameTextView.setText(values[position].getName());
-        countTextView.setText(values[position].getSupporteeCount());
+        countTextView.setText("" + values[position].getSupporteeCount());
         quoteTextView.setText(values[position].getQuote());
         //TODO: set the image to something other than the default icon
 
