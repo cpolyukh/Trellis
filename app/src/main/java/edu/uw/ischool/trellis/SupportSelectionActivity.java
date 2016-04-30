@@ -1,29 +1,47 @@
 package edu.uw.ischool.trellis;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import edu.uw.ischool.trellis.UI.ToolbarView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 public class SupportSelectionActivity extends AppCompatActivity {
+
+    Button seekSupportBtn;
+    Button giveSupportBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_support_selection);
-        Toolbar toolbar = (Toolbar) findViewById(R.layout.sample_toolbar_view);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        seekSupportBtn = (Button) findViewById(R.id.seekSupportBtn);
+        giveSupportBtn = (Button) findViewById(R.id.giveSupportBtn);
+
+        seekSupportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(View v) {
+                Intent next = new Intent(SupportSelectionActivity.this, LearnMoreActivity.class);
+                startActivity(next);
             }
         });
+
+        giveSupportBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(SupportSelectionActivity.this, LearnMoreActivity.class);
+                startActivity(next);
+            }
+        });
+
+
     }
 
 }
