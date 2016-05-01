@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
@@ -25,11 +26,10 @@ public class ConversationStarterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation_starter);
 
-        //app = (MainApp) getApplication();
+        app = (MainApp) getApplication();
 
         dropdown = (Spinner) findViewById(R.id.spinner);
-
-        final String[] categories = {"Most Frequently Used", "Most Popular", "Recommended", "Academics", "Family", "Friends", "Romantic Relationships", "Current Events"};
+        final String[] categories = ConversationCategory.getConversationStarterTitlesArray();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, categories);
 
@@ -37,14 +37,12 @@ public class ConversationStarterActivity extends AppCompatActivity {
 
         categoryList = (ListView) findViewById(R.id.listView);
 
-        final String[] currentItems = {"How are your classes going?", "What have you done today?",
-                "Tell me about how this past week has been. What has been the most rewarding part?",
-                "What's your favorite food?", "What's your favorite kind of animal?",
-                "Have you been watching the recent campaign elections? What are your thoughs?",
-                "What do you do for fun?", "Do you have any pets?"};
+        String title = dropdown.getSelectedItem().toString();
+        String[] currentItems = ConversationCategory.getConversationStartersArray(title);
 
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, currentItems);
         categoryList.setAdapter(categoryAdapter);
+
     }
 
 }
