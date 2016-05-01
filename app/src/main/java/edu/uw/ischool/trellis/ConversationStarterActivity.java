@@ -32,17 +32,37 @@ public class ConversationStarterActivity extends AppCompatActivity {
         final String[] categories = ConversationCategory.getConversationStarterTitlesArray();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, categories);
+        final ConversationStarterActivity current = this;
 
         dropdown.setAdapter(adapter);
 
         categoryList = (ListView) findViewById(R.id.listView);
 
         String title = dropdown.getSelectedItem().toString();
-        String[] currentItems = ConversationCategory.getConversationStartersArray(title);
+        final String[] currentItems = ConversationCategory.getConversationStartersArray(title);
 
-        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, currentItems);
+        final ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, currentItems);
         categoryList.setAdapter(categoryAdapter);
 
+
+        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                       int arg2, long arg3) {
+                // TODO Auto-generated method stub
+                String s = dropdown.getItemAtPosition(arg2).toString();
+                String[] items = ConversationCategory.getConversationStartersArray(s);
+                ArrayAdapter<String> newCategoryAdapter = new ArrayAdapter<String>(current, android.R.layout.simple_list_item_1, items);
+                categoryList.setAdapter(newCategoryAdapter);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+
+            }
+        });
     }
 
 }
