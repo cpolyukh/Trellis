@@ -1,0 +1,119 @@
+[
+    { "category":"Academics",
+      "starter":[
+        "How are your classes going?",
+        "What classes are you taking right now?",
+        "What's your favorite class you're in and why do you like it?",
+        "Where do you go to school?",
+        "Do you have a major yet? What is it?",
+        "What's your hardest class?",
+        "Have you been struggling academically at all?",
+        "Do academics ever stress you out or make you feel depressed?",
+        "Do you have any academic goals for the future?",
+        "Is there anything distracting you from being successful in your classes?"
+      ],
+      "level":[
+        3, 1, 2, 1, 1, 3, 4, 5, 4, 5
+      ]
+    },
+    { "category":"Family",
+      "starter":[
+        "Do you have any siblings?",
+        "What do you like to do with your family?",
+        "How do you feel when you're around your family?",
+        "What conflicts have you had with your family?",
+        "Does your family support you?",
+        "Do you feel comfortable talking to your family when you feel sad or stressed?",
+        "Is there anything you feel like you can't share with your family?",
+        "What's your favorite memory with your family?",
+        "Have you ever lost anyone in your family?",
+        "What is your relationship with your extended family like?",
+        "Did you do anything fun over the weekend with your family?",
+        "If you could trade places with anyone in your family for a day who would it be?",
+        "If you could describe every member of your family as an animal, who would they be?"
+      ],
+      "level":[
+        1, 1, 3, 4, 4, 4, 5, 2, 5, 2, 1, 3, 2
+      ]
+    },
+    { "category":"Friends",
+      "starter":[
+        "Do you have a best friend?",
+        "Who do you feel most comfortable talking to?",
+        "Who can you be yourself around?",
+        "What don't your friends understand when you've talked to them about the way you feel?",
+        "Who has been there for you the most?",
+        "What do your friends do or say that bothers you?",
+        "Do you have any trouble making friends or connecting with people?",
+        "What do you like to do with your friends?",
+        "Who is your oldest friend?",
+        "Have any of your friends ever bullied you or betrayed your trust?",
+        "What qualities do you look for in a friend?"
+      ],
+      "level":[
+        2, 3, 3, 4, 3, 4, 5, 1, 1, 5, 2
+      ]
+    },
+    { "category":"Romantic Relationships",
+      "starter":[
+        "Have you ever had a girlfriend or boyfriend?",
+        "Do you currently have a girlfriend or boyfriend?",
+        "Are you comfortable with your sexuality and gender identity?",
+        "Has your sexuality or gender identity ever been confusing or difficult for you to come to terms with?",
+        "Have you ever been abused by a boyfriend or girlfriend in any way?",
+        "Have you ever been with someone that made you feel sad or stressed?",
+        "What do you look for in a girlfriend or boyfriend?",
+        "What has a girlfriend or boyfriend done or said that made you feel great?",
+        "Have you ever had to hide a relationship for any reason?",
+        "Has it ever been difficult for you to balance a relationship with the other things going on in your life?"
+      ],
+      "level":[
+        3, 3, 5, 5, 5, 4, 2, 2, 4, 3
+      ]
+    },
+    { "category":"Current Events and Pop Culture",
+      "starter":[
+        "Have you been watching the recent campaign elections? What are your thoughts?",
+        "What's your favorite TV show?",
+        "What's the last show you binge watched?",
+        "What kind of music do you listen to?",
+        "Who is one celebrity you wish you could have dinner with?",
+        "What famous figure would you switch places with for a day?",
+        "Does social media ever stress you out or make you sad?"
+      ],
+      "level":[
+        4, 1, 1, 1, 2, 2, 4
+      ]
+    },
+    {"category":"Body Image and Health",
+      "starter":[
+        "Have you ever struggled with your body image?",
+        "What is your favorite thing about your appearance?",
+        "Have you ever gone to extreme measures to change the way you look?",
+        "Have you ever intentionally hurt yourself?"
+      ],
+      "level":[
+        4, 3, 5, 5
+      ]
+    },
+    { "category":"Activities and Personal Interests",
+      "starter":[
+        "What have you done today?",
+        "Tell me about how this past week has been. What has been the most rewarding part?"
+      ],
+      "level":[
+        2, 3
+      ]
+    },
+    { "category":"Ice Breakers",
+      "starter":[
+        "What's your favorite food?",
+        "What's your favorite kind of animal?",
+        "What do you do for fun?",
+        "Do you have any pets?"
+      ],
+      "level":[
+        1, 1, 1, 1
+      ]
+    }
+]
