@@ -2,16 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.uw.ischool.trellis" >
 
-
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-<<<<<<< HEAD
+        android:name="edu.uw.ischool.trellis.MainApp"
         android:theme="@style/AppTheme" >
-
-        <uses-permission android:name="android.permission.INTERNET"/>
 
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
 
@@ -20,11 +19,6 @@
                 "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:label="@string/app_name" />
-
-=======
-        android:theme="@style/AppTheme"
-        android:name="edu.uw.ischool.trellis.MainApp">
->>>>>>> 0ec4393065b3dcc1a391b9d5cb42fe5c7b0da10c
         <activity
             android:name=".LoginActivity"
             android:label="@string/app_name" >
