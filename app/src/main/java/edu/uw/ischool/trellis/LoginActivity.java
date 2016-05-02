@@ -4,13 +4,10 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -22,9 +19,18 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphRequestAsyncTask;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -64,30 +70,37 @@ public class LoginActivity extends AppCompatActivity {
         // If the access token is available already assign it.
         accessToken = AccessToken.getCurrentAccessToken();
 
-        //generate keyhash
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo(
-                    "edu.uw.ischool.trellis",
-                    PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-
-        } catch (NoSuchAlgorithmException e) {
-
-        }
 
         // Callback registration
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // App code
-                Toast.makeText(getApplicationContext(), "Login success", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(LoginActivity.this, SupportSelectionActivity.class));
+                Log.e("onSuccess", "--------" + loginResult.getAccessToken());
+                Log.e("Token", "--------" + loginResult.getAccessToken().getToken());
+                Log.e("Permision", "--------" + loginResult.getRecentlyGrantedPermissions());
+                Profile profile = Profile.getCurrentProfile();
+                Log.e("ProfileDataNameF", "--" + profile.getFirstName());
+                Log.e("ProfileDataNameL", "--" + profile.getLastName());
 
+                Log.e("Image URI", "--" + profile.getLinkUri());
+
+                Log.e("OnGraph", "------------------------");
+                Toast.makeText(getApplicationContext(), "Login success", Toast.LENGTH_SHORT).show();
+
+                final GraphRequestAsyncTask request = new GraphRequest(
+                        AccessToken.getCurrentAccessToken(),
+                        "/me/friends",
+                        null,
+                        HttpMethod.GET,
+                        new GraphRequest.Callback() {
+                            public void onCompleted(GraphResponse response) {
+                                Log.e("GraphResponse", "-------------" + response.toString());
+                            }
+                        }
+                ).executeAsync();
+
+                startActivity(new Intent(LoginActivity.this, SupportSelectionActivity.class));
             }
 
             @Override
