@@ -5,9 +5,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by christina3135 on 4/30/2016.
@@ -19,6 +22,7 @@ public class ConversationCategory {
     //to a list of questions or conversation starters with that level in the given category
     private Map<Integer, List<String>> levelToConversationStarters;
     private static List<String> allConversationStarterTitles;
+    private static List<String> allConversationStarterStrings;
     private static List<ConversationCategory> allConversationStarters;
 
     private int size;
@@ -29,6 +33,7 @@ public class ConversationCategory {
         JSONArray conversationStartersArray = jsonObject.getJSONArray("starter");
         JSONArray levelArray = jsonObject.getJSONArray("level");
         levelToConversationStarters = new HashMap<Integer, List<String>>();
+        allConversationStarterStrings = new ArrayList<String>();
 
         size = 0;
 
@@ -40,6 +45,7 @@ public class ConversationCategory {
                 levelToConversationStarters.put(level, new ArrayList<String>());
             }
 
+            allConversationStarterStrings.add(starter);
             levelToConversationStarters.get(level).add(starter);
             size++;
         }
@@ -94,6 +100,91 @@ public class ConversationCategory {
         }
 
         return results;
+    }
+
+    //Min and max both inclusive
+    public static String[] getCSByLevelAllCategories(int min, int max) {
+        int localSize = 0;
+        List<List<String>> lstConversationStarters = new ArrayList<List<String>>();
+
+        for (ConversationCategory currentCategory : allConversationStarters) {
+
+            for (int i = min; i <= max; i++)
+            {
+                List<String> currentList = currentCategory.getLevelToConversationStarters().get(i);
+
+                if (currentList != null)
+                {
+                    lstConversationStarters.add(currentList);
+                    localSize += currentList.size();
+                }
+            }
+        }
+
+        String[] output = new String[localSize];
+        int index = 0;
+
+        for (List<String> currentList : lstConversationStarters)
+        {
+
+            for (String currentConversationStarter : currentList)
+            {
+                output[index] = currentConversationStarter;
+                index++;
+            }
+        }
+
+        return output;
+    }
+
+    //Min and max both inclusive
+    public String[] getCSByLevelCurrentCategory(int min, int max)
+    {
+        int localSize = 0;
+
+        for (int i = min; i <= max; i++)
+        {
+            List<String> currentList = levelToConversationStarters.get(i);
+
+            if (currentList != null)
+            {
+                localSize += currentList.size();
+            }
+        }
+
+        String[] output = new String[localSize];
+        int index = 0;
+
+        for (int i = min; i <= max; i++)
+        {
+            List<String> currentList = levelToConversationStarters.get(i);
+
+            if (currentList != null)
+            {
+
+                for (String currentConversationStarter : currentList)
+                {
+                    output[index] = currentConversationStarter;
+                    index++;
+                }
+            }
+        }
+
+        return output;
+    }
+
+    public String[] getRandomConversationStarters(int num)
+    {
+        Random r = new Random();
+        Collections.shuffle(allConversationStarterStrings, r);
+        String[] output = new String[num];
+
+        for (int i = 0; i < num; i++)
+        {
+            output[i] = allConversationStarterStrings.get(i);
+        }
+
+        return output;
     }
 
     public Map<Integer, List<String>> getLevelToConversationStarters() {

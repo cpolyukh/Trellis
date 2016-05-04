@@ -11,11 +11,11 @@
         "Do academics ever stress you out or make you feel depressed?",
         "Do you have any academic goals for the future?",
         "Is there anything distracting you from being successful in your classes?"
-      ]
+      ],
       "level":[
         3, 1, 2, 1, 1, 3, 4, 5, 4, 5
       ]
-    }
+    },
     { "category":"Family",
       "starters":[
         "Do you have any siblings?",
@@ -35,7 +35,7 @@
       "level":[
         1, 1, 3, 4, 4, 4, 5, 2, 5, 2, 1, 3, 2
       ]
-    }
+    },
     { "category":"Friends",
       "starters":[
         "Do you have a best friend?",
@@ -49,11 +49,11 @@
         "Who is your oldest friend?",
         "Have any of your friends ever bullied you or betrayed your trust?",
         "What qualities do you look for in a friend?"
-      ]
+      ],
       "level":[
         2, 3, 3, 4, 3, 4, 5, 1, 1, 5, 2
       ]
-    }
+    },
     { "category":"Romantic Relationships",
       "starters":[
         "Have you ever had a girlfriend or boyfriend?",
@@ -66,11 +66,11 @@
         "What has a girlfriend or boyfriend done or said that made you feel great?",
         "Have you ever had to hide a relationship for any reason?",
         "Has it ever been difficult for you to balance a relationship with the other things going on in your life?"
-      ]
+      ],
       "level":[
         3, 3, 5, 5, 5, 4, 2, 2, 4, 3
       ]
-    }
+    },
     { "category":"Current Events and Pop Culture",
       "starters":[
         "Have you been watching the recent campaign elections? What are your thoughts?",
@@ -80,38 +80,38 @@
         "Who is one celebrity you wish you could have dinner with?",
         "What famous figure would you switch places with for a day?",
         "Does social media ever stress you out or make you sad?"
-      ]
+      ],
       "level":[
         4, 1, 1, 1, 2, 2, 4
       ]
-    }
+    },
     {"category":"Body Image and Health",
       "starters":[
         "Have you ever struggled with your body image?",
         "What is your favorite thing about your appearance?",
         "Have you ever gone to extreme measures to change the way you look?",
         "Have you ever intentionally hurt yourself?"
-      ]
+      ],
       "level":[
         4, 3, 5, 5
       ]
-    }
+    },
     { "category":"Activities and Personal Interests",
       "starters":[
         "What have you done today?",
         "Tell me about how this past week has been. What has been the most rewarding part?"
-      ]
+      ],
       "level":[
         2, 3
       ]
-    }
+    },
     { "category":"Ice Breakers",
       "starters":[
         "What's your favorite food?",
         "What's your favorite kind of animal?",
         "What do you do for fun?",
         "Do you have any pets?"
-      ]
+      ],
       "level":[
         1, 1, 1, 1
       ]
