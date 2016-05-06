@@ -12,7 +12,7 @@ public class SupportSeeker extends User {
     private static List<SupportSeeker> allSupportSeekers;
 
     public SupportSeeker(String firstName, String lastName) {
-        super(firstName, lastName, null, null);
+        super(firstName, lastName, null, null, false);
         supporters = new HashSet<Supporter>();
         allSupportSeekers.add(this);
     }

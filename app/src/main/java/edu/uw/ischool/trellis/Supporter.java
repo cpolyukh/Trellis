@@ -23,7 +23,7 @@ public class Supporter extends User {
     }
 
     public Supporter(String firstName, String lastName, String quote, String bio) {
-        super(firstName, lastName, quote, bio);
+        super(firstName, lastName, quote, bio, true);
         supportees = new HashSet<SupportSeeker>();
 
         if (allSupporters == null) {

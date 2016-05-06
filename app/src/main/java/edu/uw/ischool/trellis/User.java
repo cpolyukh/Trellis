@@ -8,8 +8,9 @@ public class User {
     private String lastName;
     private String quote;
     private String bio;
+    private boolean isSupporter;
 
-    public User(String firstName, String lastName, String quote, String bio) {
+    public User(String firstName, String lastName, String quote, String bio, boolean isSupporter) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.quote = quote;
@@ -50,6 +51,14 @@ public class User {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public boolean isSupporter() {
+        return isSupporter;
+    }
+
+    public void setSupporter(boolean supporter) {
+        isSupporter = supporter;
     }
 
 }

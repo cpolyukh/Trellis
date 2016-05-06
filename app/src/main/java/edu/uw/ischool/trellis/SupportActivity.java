@@ -19,7 +19,7 @@ import org.w3c.dom.Text;
 import java.util.List;
 
 public class SupportActivity extends AppCompatActivity {
-    Application app;
+    MainApp app;
     ListView list;
 
     List<Supporter> allSupporters;
@@ -31,7 +31,7 @@ public class SupportActivity extends AppCompatActivity {
 
         //TODO: Fix this code! Almost working
 
-        app = getApplication();
+        app = (MainApp) getApplication();
 
         //Intent launchingIntent = getIntent();
 

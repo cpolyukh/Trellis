@@ -70,7 +70,6 @@ public class LoginActivity extends AppCompatActivity {
         // If the access token is available already assign it.
         accessToken = AccessToken.getCurrentAccessToken();
 
-
         // Callback registration
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
