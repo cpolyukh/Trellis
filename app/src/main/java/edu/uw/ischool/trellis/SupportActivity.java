@@ -3,6 +3,7 @@ package edu.uw.ischool.trellis;
 import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -29,6 +30,9 @@ public class SupportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_support);
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         //TODO: Fix this code! Almost working
 
         app = (MainApp) getApplication();
@@ -37,7 +41,7 @@ public class SupportActivity extends AppCompatActivity {
 
         list = (ListView) findViewById(R.id.lstSupporters);
 
-        addDefaultSupporters();
+        addSupporters();
 
         //TODO: make sure that this list only contains supporters that the given
         //user is not already connected to
@@ -130,6 +134,16 @@ public class SupportActivity extends AppCompatActivity {
 
     }
 
+    private void addSupporters() {
+        List<User> userFriends = app.getCurrentUser().getUserFriends();
+
+        for(int i = 0; i < userFriends.size(); i++) {
+            User friend = userFriends.get(i);
+            Supporter newSupporter = new Supporter(friend.getFirstName(), friend.getLastName(), "WOw let me support u pls", "", friend.getId());
+            newSupporter.setSupporteeCount(i * 2);
+        }
+
+    }
 
     //Used for testing since we don't have actual supporters yet. These are simply default supporters
     //used as an example of how supporters would be displayed

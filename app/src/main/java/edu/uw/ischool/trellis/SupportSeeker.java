@@ -1,5 +1,7 @@
 package edu.uw.ischool.trellis;
 
+import org.json.JSONArray;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,7 +14,7 @@ public class SupportSeeker extends User {
     private static List<SupportSeeker> allSupportSeekers;
 
     public SupportSeeker(String firstName, String lastName) {
-        super(firstName, lastName, null, null, false);
+        super(firstName, lastName, null, null, false, "", "");
         supporters = new HashSet<Supporter>();
         allSupportSeekers.add(this);
     }

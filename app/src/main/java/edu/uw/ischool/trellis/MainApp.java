@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class MainApp extends Application {
     private static MainApp instance = null;
-    private User currentUser;
+    private static User currentUser;
 
     public User getCurrentUser() {
         return currentUser;

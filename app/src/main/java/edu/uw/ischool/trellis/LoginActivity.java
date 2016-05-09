@@ -32,6 +32,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -43,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     LoginButton loginButton;
     Button guestButton;
     CallbackManager callbackManager;
+    MainApp app;
     AccessTokenTracker accessTokenTracker;
     AccessToken accessToken;
 
@@ -52,6 +54,9 @@ public class LoginActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_login);
+
+        app = (MainApp) getApplication();
+
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("public_profile", "user_friends");
@@ -75,10 +80,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // App code
+
                 Log.e("onSuccess", "--------" + loginResult.getAccessToken());
                 Log.e("Token", "--------" + loginResult.getAccessToken().getToken());
                 Log.e("Permision", "--------" + loginResult.getRecentlyGrantedPermissions());
-                Profile profile = Profile.getCurrentProfile();
+                final Profile profile = Profile.getCurrentProfile();
                 Log.e("ProfileDataNameF", "--" + profile.getFirstName());
                 Log.e("ProfileDataNameL", "--" + profile.getLastName());
 
@@ -95,11 +101,24 @@ public class LoginActivity extends AppCompatActivity {
                         new GraphRequest.Callback() {
                             public void onCompleted(GraphResponse response) {
                                 Log.e("GraphResponse", "-------------" + response.toString());
+                                try {
+                                    // Log.e("Dataresponse", "-------------" + response.getJSONObject().getJSONArray("data").toString());
+                                    String friends = response.getJSONObject().getJSONArray("data").toString();
+                                    Log.e("Dataresponse", "-------------" + friends);
+                                    User user = new User(profile.getFirstName(), profile.getLastName(), "", "", false, friends, "");
+                                    Log.e("User", "-------------" + user.toString());
+
+                                    app.setCurrentUser(user);
+
+                                } catch (JSONException e) {
+                                    Log.e("Dataresponse", "-------------FAILED");
+                                }
                             }
                         }
                 ).executeAsync();
 
-                startActivity(new Intent(LoginActivity.this, SupportSelectionActivity.class));
+                Intent next = new Intent(LoginActivity.this, SupportSelectionActivity.class);
+                startActivity(next);
             }
 
             @Override

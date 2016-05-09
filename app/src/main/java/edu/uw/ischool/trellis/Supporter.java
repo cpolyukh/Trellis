@@ -1,5 +1,7 @@
 package edu.uw.ischool.trellis;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -15,15 +17,15 @@ public class Supporter extends User {
     private int supporteeCount;
 
     public Supporter(String firstName, String lastName) {
-        this(firstName, lastName, null, null);
+        this(firstName, lastName, null, null, "");
     }
 
     public Supporter(String firstName, String lastName, String quote) {
-        this(firstName, lastName, quote, null);
+        this(firstName, lastName, quote, null, "");
     }
 
-    public Supporter(String firstName, String lastName, String quote, String bio) {
-        super(firstName, lastName, quote, bio, true);
+    public Supporter(String firstName, String lastName, String quote, String bio, String id) {
+        super(firstName, lastName, quote, bio, true, "", id);
         supportees = new HashSet<SupportSeeker>();
 
         if (allSupporters == null) {

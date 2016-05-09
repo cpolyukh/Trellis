@@ -11,13 +11,15 @@ import android.view.View;
 import android.widget.ImageButton;
 
 public class LearnMoreActivity extends AppCompatActivity {
+    MainApp app;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_learn_more);
 
-
+        app = (MainApp) getApplication();
 
         /********************************************************/
         /********************** TOOLBAR SETUP *******************/
