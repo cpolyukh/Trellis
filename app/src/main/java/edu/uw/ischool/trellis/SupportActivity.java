@@ -47,7 +47,7 @@ public class SupportActivity extends AppCompatActivity {
         //user is not already connected to
         allSupporters = Supporter.getAllSupporters();
 
-        Supporter[] supporterArray = new Supporter[allSupporters.size()];
+        final Supporter[] supporterArray = new Supporter[allSupporters.size()];
         for (int i = 0; i < allSupporters.size(); i++) {
             supporterArray[i] = allSupporters.get(i);
         }
@@ -58,6 +58,9 @@ public class SupportActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent next = new Intent(SupportActivity.this, ProfileActivity.class);
+                next.putExtra("id", supporterArray[position].getId());
+                next.putExtra("firstName", supporterArray[position].getFirstName());
+                next.putExtra("lastName", supporterArray[position].getLastName());
 
                 //TODO: send extras necessary to make sure the profile clicked matches the profile displayed
                 //on the next page
@@ -135,6 +138,8 @@ public class SupportActivity extends AppCompatActivity {
     }
 
     private void addSupporters() {
+        Supporter.resetSupporters();
+
         List<User> userFriends = app.getCurrentUser().getUserFriends();
 
         for(int i = 0; i < userFriends.size(); i++) {

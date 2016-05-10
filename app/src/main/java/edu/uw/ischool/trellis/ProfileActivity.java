@@ -1,14 +1,22 @@
 package edu.uw.ischool.trellis;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.io.IOException;
+import java.net.URL;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -19,6 +27,30 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        Intent intent = getIntent();
+        String id = intent.getStringExtra("id");
+        String firstName = intent.getStringExtra("firstName");
+        String lastName = intent.getStringExtra("lastName");
+        String fullName = firstName + " " + lastName;
+
+        ImageView photo = (ImageView) findViewById(R.id.photo);
+        TextView name = (TextView) findViewById(R.id.name);
+
+        name.setText(fullName);
+
+        String imgURL = "https://graph.facebook.com/" + id + "/picture?type=large";
+
+        try {
+            URL url = new URL(imgURL);
+            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            photo.setImageBitmap(bmp);
+        } catch (IOException e) {
+            Log.e("Image Download", e.getMessage());
+        }
+
+
+
 
         messageBtn = (Button) findViewById(R.id.messageBtn);
         favoriteBtn = (Button) findViewById(R.id.favoriteBtn);

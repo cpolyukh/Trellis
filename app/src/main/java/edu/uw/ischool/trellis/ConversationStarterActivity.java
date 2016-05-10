@@ -1,5 +1,6 @@
 package edu.uw.ischool.trellis;
 
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -63,6 +65,59 @@ public class ConversationStarterActivity extends AppCompatActivity {
 
             }
         });
+
+
+        /********************************************************/
+        /********************** TOOLBAR SETUP *******************/
+        /********************************************************/
+        ImageButton supportIcon = (ImageButton) findViewById(R.id.supportIcon);
+        ImageButton messageIcon = (ImageButton) findViewById(R.id.messageIcon);
+        ImageButton conversationIcon = (ImageButton) findViewById(R.id.conversationIcon);
+        ImageButton readMoreIcon = (ImageButton) findViewById(R.id.readMoreIcon);
+        ImageButton settingsIcon = (ImageButton) findViewById(R.id.settingsIcon);
+
+        supportIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(ConversationStarterActivity.this, SupportActivity.class);
+                startActivity(next);
+            }
+        });
+
+        messageIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(ConversationStarterActivity.this, MessagesActivity.class);
+                startActivity(next);
+            }
+        });
+
+        conversationIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(ConversationStarterActivity.this, ConversationStarterActivity.class);
+                startActivity(next);
+            }
+        });
+
+        readMoreIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(ConversationStarterActivity.this, LearnMoreActivity.class);
+                startActivity(next);
+            }
+        });
+
+        settingsIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(ConversationStarterActivity.this, EditProfileActivity.class);
+                startActivity(next);
+            }
+        });
+        /********************************************************/
+        /********************************************************/
+        /********************************************************/
     }
 
 }

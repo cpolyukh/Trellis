@@ -34,6 +34,10 @@ public class Supporter extends User {
         allSupporters.add(this);
     }
 
+    public static void resetSupporters() {
+        allSupporters = new ArrayList<Supporter>();
+    }
+
     public void addSupportSeeker(SupportSeeker newSupportSeeker) {
         supportees.add(newSupportSeeker);
         supporteeCount++;
