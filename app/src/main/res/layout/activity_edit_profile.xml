@@ -121,14 +121,22 @@
                 android:layout_below="@+id/textView26"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
+
+
         </RelativeLayout>
     </ScrollView>
+
+
+
+
 
     <RelativeLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:gravity="bottom"
+        android:id="@+id/layoutWrapper"
         xmlns:android="http://schemas.android.com/apk/res/android">
+
 
         <android.support.v7.widget.Toolbar  xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -139,6 +147,8 @@
             android:minHeight="?attr/actionBarSize"
             app:contentInsetStart="0dp"
             app:theme="@style/Base.Theme.AppCompat.CompactMenu" >
+
+
 
             <LinearLayout
                 android:id="@+id/toolbarmenucontainer"
@@ -214,7 +224,18 @@
             </LinearLayout>
         </android.support.v7.widget.Toolbar>
 
+
     </RelativeLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="DONE"
+        android:id="@+id/doneBtn"
+        android:layout_alignBottom="@+id/layoutWrapper"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="61dp" />
 
 </RelativeLayout>
 

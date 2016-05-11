@@ -117,7 +117,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                 ).executeAsync();
 
-                Intent next = new Intent(LoginActivity.this, SupportSelectionActivity.class);
+                Intent next = new Intent(LoginActivity.this, EditProfileActivity.class);
                 startActivity(next);
             }
 
@@ -138,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
         guestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent next = new Intent(LoginActivity.this, SupportSelectionActivity.class);
+                Intent next = new Intent(LoginActivity.this, LearnMoreActivity.class);
                 startActivity(next);
             }
         });

@@ -7,6 +7,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -15,6 +17,18 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        Button doneBtn = (Button) findViewById(R.id.doneBtn);
+
+        doneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(EditProfileActivity.this, LearnMoreActivity.class);
+                startActivity(next);
+            }
+        });
 
         /********************************************************/
         /********************** TOOLBAR SETUP *******************/

@@ -64,7 +64,7 @@ public class MessagesActivity extends FragmentActivity {
 
     public static Bundle makeSendBirdArgs(String appKey, String uuid, String nickname) {
         Bundle args = new Bundle();
-        args.putString("appKey", appKey);
+        args.putString("appKey", "9D5849EF-E3E4-43F9-843A-1DB0CA03A4BB");
         args.putString("uuid", uuid);
         args.putString("nickname", nickname);
         return args;
@@ -77,7 +77,7 @@ public class MessagesActivity extends FragmentActivity {
         setContentView(R.layout.activity_sendbird_user_list);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        initSendBird(getIntent().getExtras());
+        initSendBird(makeSendBirdArgs("9D5849EF-E3E4-43F9-843A-1DB0CA03A4BB", "23423424234243234", "nickname"));
         initFragment();
         initUIComponents();
     }
