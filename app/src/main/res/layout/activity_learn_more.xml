@@ -22,14 +22,6 @@
                 android:orientation="vertical"
                 android:paddingBottom="25dp">
 
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="175dp"
-                    android:src="@drawable/support4"
-                    android:id="@+id/support"/>
-
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -41,7 +33,21 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="175dp"
-                    android:id="@+id/support1"
+                    android:src="@drawable/support4"
+                    android:id="@+id/support1"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Breaking the Stigma"
+                    android:paddingBottom="25dp"
+                    android:id="@+id/textView2" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="175dp"
+                    android:id="@+id/support2"
                     android:src="@drawable/support2"
                     android:layout_marginTop="0dp"
                     android:layout_marginBottom="0dp"
@@ -52,29 +58,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Breaking the Stigma"
+                    android:text="Genetics and Depression"
                     android:paddingBottom="25dp"
-                    android:id="@+id/textView2" />
-
+                    android:id="@+id/textView3" />
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="175dp"
-                    android:id="@+id/suppor2t"
+                    android:id="@+id/support3"
                     android:src="@drawable/support3"
                     android:layout_alignParentEnd="false"
                     android:layout_alignParentRight="false"
                     android:layout_marginTop="0dp"
                     android:layout_marginBottom="0dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Genetics and Depression"
-                    android:paddingBottom="25dp"
-                    android:id="@+id/textView3" />
-
 
             </LinearLayout>
         </ScrollView>

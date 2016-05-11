@@ -2,6 +2,7 @@ package edu.uw.ischool.trellis;
 
 import android.content.Intent;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 public class LearnMoreActivity extends AppCompatActivity {
     MainApp app;
@@ -73,6 +75,17 @@ public class LearnMoreActivity extends AppCompatActivity {
         /********************************************************/
         /********************************************************/
 
+        ImageView article1 = (ImageView) findViewById(R.id.support1);
+        ImageView article2 = (ImageView) findViewById(R.id.support2);
+        ImageView article3 = (ImageView) findViewById(R.id.support3);
+
+        article1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.everydayhealth.com/columns/therese-borchard-sanity-break/ways-to-help-a-friend-or-family-member-with-depression/"));
+                startActivity(browserIntent);
+            }
+        });
 
     }
 
