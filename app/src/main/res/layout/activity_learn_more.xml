@@ -27,30 +27,36 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="10 Signs Your Friend Might Have Depression"
-                    android:paddingBottom="25dp"
-                    android:id="@+id/textView" />
+                    android:paddingBottom="15dp"
+                    android:id="@+id/textView1" />
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="175dp"
-                    android:src="@drawable/support4"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/depression1"
+                    android:paddingBottom="25dp"
                     android:id="@+id/support1"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Breaking the Stigma"
-                    android:paddingBottom="25dp"
+                    android:text="Do I Have Depression: Mental Health Screening"
+                    android:paddingBottom="15dp"
                     android:id="@+id/textView2" />
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="175dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
                     android:id="@+id/support2"
                     android:src="@drawable/support2"
                     android:layout_marginTop="0dp"
                     android:layout_marginBottom="0dp"
+                    android:paddingBottom="25dp"
                     android:padding="0dp"
                     android:layout_margin="0dp" />
 
@@ -58,17 +64,60 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Genetics and Depression"
-                    android:paddingBottom="25dp"
+                    android:text="Bringing it Up: 13 Tips for Talking with Your Physician About Depression"
+                    android:paddingBottom="15dp"
                     android:id="@+id/textView3" />
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="175dp"
                     android:id="@+id/support3"
                     android:src="@drawable/support3"
                     android:layout_alignParentEnd="false"
                     android:layout_alignParentRight="false"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:layout_marginTop="0dp"
+                    android:paddingBottom="25dp"
+                    android:layout_marginBottom="0dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="When Your Friend Is Depressed...Don't and Dos"
+                    android:paddingBottom="15dp"
+                    android:id="@+id/textView4" />
+
+                <ImageView
+                    android:id="@+id/support4"
+                    android:src="@drawable/support3"
+                    android:layout_alignParentEnd="false"
+                    android:layout_alignParentRight="false"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="0dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="9 Depression Myths"
+                    android:paddingBottom="25dp"
+                    android:id="@+id/textView5" />
+
+                <ImageView
+                    android:id="@+id/support5"
+                    android:src="@drawable/support3"
+                    android:layout_alignParentEnd="false"
+                    android:layout_alignParentRight="false"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
                     android:layout_marginTop="0dp"
                     android:layout_marginBottom="0dp"/>
 
