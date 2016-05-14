@@ -92,6 +92,11 @@ public class User implements Serializable {
         this.id = id;
     }
 
+    public String getImageUrl() {
+        return  "https://graph.facebook.com/" + id + "/picture?type=large";
+
+    }
+
 
     public List<User> getUserFriends() {
         //TODO: Change this to eventually find the user instead of creating a new one
