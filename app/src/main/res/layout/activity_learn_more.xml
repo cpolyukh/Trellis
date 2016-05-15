@@ -30,7 +30,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#ffffff"
-                android:text="Learn More"
+                android:text="LEARN MORE"
                 />
         </RelativeLayout>
 

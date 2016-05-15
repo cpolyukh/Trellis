@@ -24,16 +24,13 @@ public class LearnMoreActivity extends AppCompatActivity {
         setContentView(R.layout.activity_learn_more);
 
         Typeface myTypeface = Typeface.createFromAsset(getAssets(), "Futura.ttc");
-        TextView textView1 = (TextView) findViewById(R.id.textView1);
-        TextView textView2 = (TextView) findViewById(R.id.textView2);
-        TextView textView3 = (TextView) findViewById(R.id.textView3);
-        TextView textView4 = (TextView) findViewById(R.id.textView4);
-        TextView textView5 = (TextView) findViewById(R.id.textView5);
-        textView1.setTypeface(myTypeface);
-        textView2.setTypeface(myTypeface);
-        textView3.setTypeface(myTypeface);
-        textView4.setTypeface(myTypeface);
-        textView5.setTypeface(myTypeface);
+        TextView[] textViews = {(TextView) findViewById(R.id.textView1), (TextView) findViewById(R.id.textView2),
+                                (TextView) findViewById(R.id.textView3), (TextView) findViewById(R.id.textView4),
+                                (TextView) findViewById(R.id.textView5)};
+        for (TextView current : textViews)
+        {
+            current.setTypeface(myTypeface);
+        }
 
 
         app = (MainApp) getApplication();
