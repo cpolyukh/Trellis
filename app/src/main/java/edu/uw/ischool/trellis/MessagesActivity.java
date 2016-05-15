@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -72,6 +73,7 @@ public class MessagesActivity extends FragmentActivity {
         mAdapter = new UserAdapter(getApplicationContext(), app.getCurrentUser());
         ListView list = (ListView) findViewById(R.id.list);
 
+
         list.setAdapter(mAdapter);
 
 
@@ -106,7 +108,7 @@ public class MessagesActivity extends FragmentActivity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
 
@@ -114,8 +116,12 @@ public class MessagesActivity extends FragmentActivity {
 
             View rowView = mInflater.inflate(R.layout.sendbird_view_user, parent, false);
 
+
             TextView nameTextView = (TextView) rowView.findViewById(R.id.txt_name);
             ImageView imgThumb = (ImageView) rowView.findViewById(R.id.img_thumbnail);
+
+            Typeface myTypeface = Typeface.createFromAsset(getAssets(), "Futura.ttc");
+            nameTextView.setTypeface(myTypeface);
 
             nameTextView.setText(item.getName());
             displayUrlImage(imgThumb, item.getImageUrl());
@@ -123,7 +129,8 @@ public class MessagesActivity extends FragmentActivity {
             rowView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent next = new Intent(MessagesActivity.this, LearnMoreActivity.class);
+                    Intent next = new Intent(MessagesActivity.this, ChatActivity.class);
+                    next.putExtra("user", getItem(position).getName());
                     startActivity(next);
                 }
             });
