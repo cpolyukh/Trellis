@@ -33,7 +33,10 @@ public class ConversationCategory {
         JSONArray conversationStartersArray = jsonObject.getJSONArray("starter");
         JSONArray levelArray = jsonObject.getJSONArray("level");
         levelToConversationStarters = new HashMap<Integer, List<String>>();
-        allConversationStarterStrings = new ArrayList<String>();
+
+        if (allConversationStarterStrings == null) {
+            allConversationStarterStrings = new ArrayList<String>();
+        }
 
         size = 0;
 
@@ -173,7 +176,7 @@ public class ConversationCategory {
         return output;
     }
 
-    public String[] getRandomConversationStarters(int num)
+    public static String[] getRandomConversationStarters(int num)
     {
         Random r = new Random();
         Collections.shuffle(allConversationStarterStrings, r);
