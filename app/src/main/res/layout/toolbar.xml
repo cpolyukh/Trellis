@@ -1,0 +1,82 @@
+<android.support.v7.widget.Toolbar  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#000000"
+    android:minHeight="?attr/actionBarSize"
+    app:contentInsetStart="0dp"
+    app:theme="@style/Base.Theme.AppCompat.CompactMenu" >
+
+    <LinearLayout
+        android:id="@+id/toolbarmenucontainer"
+        android:layout_width="match_parent"
+        android:weightSum="5"
+        android:layout_height="48dp"
+        android:background="@color/background_floating_material_light"
+        android:minHeight="?attr/actionBarSize"
+        app:contentInsetStart="0dp"
+        app:theme="@style/Base.Theme.AppCompat.CompactMenu"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/friendsIcon"
+            android:clickable="true"
+            android:scaleType="fitXY"
+            android:background="@null"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:src="@drawable/Friends-01" />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/messageIcon"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:scaleType="fitXY"
+            android:background="@null"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:src="@drawable/Messages-01" />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/conversationIcon"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:scaleType="fitXY"
+            android:background="@null"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:src="@drawable/Conversation-Starters-01" />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/learnMoreIcon"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:scaleType="fitXY"
+            android:background="@null"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:src="@drawable/Learn-More-01" />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/settingsIcon"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:scaleType="fitXY"
+            android:background="@null"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:src="@drawable/Settings-01" />
+    </LinearLayout>
+</android.support.v7.widget.Toolbar>
