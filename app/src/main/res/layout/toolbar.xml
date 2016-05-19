@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:background="#000000"
     android:minHeight="?attr/actionBarSize"
+    android:layout_alignParentBottom="true"
     app:contentInsetStart="0dp"
     app:theme="@style/Base.Theme.AppCompat.CompactMenu" >
 
@@ -12,71 +13,77 @@
         android:id="@+id/toolbarmenucontainer"
         android:layout_width="match_parent"
         android:weightSum="5"
-        android:layout_height="48dp"
+        android:layout_height="56dp"
         android:background="@color/background_floating_material_light"
         android:minHeight="?attr/actionBarSize"
         app:contentInsetStart="0dp"
         app:theme="@style/Base.Theme.AppCompat.CompactMenu"
         android:orientation="horizontal" >
 
-        <ImageButton
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/friendsIcon"
-            android:clickable="true"
-            android:scaleType="fitXY"
-            android:background="@null"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:src="@drawable/Friends-01" />
+            android:background="#2b383f"
+            android:id="@+id/friendsLayoutIcon">
 
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:id="@+id/messageIcon"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:scaleType="fitXY"
-            android:background="@null"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:src="@drawable/Messages-01" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/friends02" />
+        </LinearLayout>
 
-        <ImageButton
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:id="@+id/conversationIcon"
             android:layout_weight="1"
-            android:clickable="true"
-            android:scaleType="fitXY"
-            android:background="@null"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:src="@drawable/Conversation-Starters-01" />
+            android:background="#2b383f"
+            android:id="@+id/messagesLayoutIcon">
 
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:id="@+id/learnMoreIcon"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:scaleType="fitXY"
-            android:background="@null"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:src="@drawable/Learn-More-01" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/messages02" />
+        </LinearLayout>
 
-        <ImageButton
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:id="@+id/settingsIcon"
             android:layout_weight="1"
-            android:clickable="true"
-            android:scaleType="fitXY"
-            android:background="@null"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:src="@drawable/Settings-01" />
+            android:background="#2b383f"
+            android:id="@+id/conversationStartersLayoutIcon">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/conversation02" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#2b383f"
+            android:id="@+id/learnMoreLayoutIcon">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/learn02" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#2b383f"
+            android:id="@+id/profileLayoutIcon">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/settings02" />
+        </LinearLayout>
+
     </LinearLayout>
 </android.support.v7.widget.Toolbar>

@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -84,15 +85,16 @@ public class SupportActivity extends AppCompatActivity {
         });*/
 
         /********************************************************/
-        /********************** TOOLBAR SETUP *******************/
+        /********************** NEW TOOLBAR SETUP *******************/
         /********************************************************/
-        ImageButton supportIcon = (ImageButton) findViewById(R.id.supportIcon);
-        ImageButton messageIcon = (ImageButton) findViewById(R.id.messageIcon);
-        ImageButton conversationIcon = (ImageButton) findViewById(R.id.conversationIcon);
-        ImageButton readMoreIcon = (ImageButton) findViewById(R.id.readMoreIcon);
-        ImageButton settingsIcon = (ImageButton) findViewById(R.id.settingsIcon);
+        LinearLayout friendsIcon = (LinearLayout) findViewById(R.id.friendsLayoutIcon);
+        LinearLayout messagesIcon = (LinearLayout) findViewById(R.id.messagesLayoutIcon);
+        LinearLayout conversationIcon = (LinearLayout) findViewById(R.id.conversationStartersLayoutIcon);
+        LinearLayout learnMoreIcon = (LinearLayout) findViewById(R.id.learnMoreLayoutIcon);
+        LinearLayout profileIcon = (LinearLayout) findViewById(R.id.profileLayoutIcon);
 
-        supportIcon.setOnClickListener(new View.OnClickListener() {
+
+        friendsIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(SupportActivity.this, SupportActivity.class);
@@ -100,7 +102,7 @@ public class SupportActivity extends AppCompatActivity {
             }
         });
 
-        messageIcon.setOnClickListener(new View.OnClickListener() {
+        messagesIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(SupportActivity.this, MessagesActivity.class);
@@ -116,7 +118,7 @@ public class SupportActivity extends AppCompatActivity {
             }
         });
 
-        readMoreIcon.setOnClickListener(new View.OnClickListener() {
+        learnMoreIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(SupportActivity.this, LearnMoreActivity.class);
@@ -124,7 +126,7 @@ public class SupportActivity extends AppCompatActivity {
             }
         });
 
-        settingsIcon.setOnClickListener(new View.OnClickListener() {
+        profileIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(SupportActivity.this, EditProfileActivity.class);
@@ -134,6 +136,7 @@ public class SupportActivity extends AppCompatActivity {
         /********************************************************/
         /********************************************************/
         /********************************************************/
+
 
     }
 

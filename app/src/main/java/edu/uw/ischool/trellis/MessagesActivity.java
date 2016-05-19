@@ -25,6 +25,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,6 +76,59 @@ public class MessagesActivity extends FragmentActivity {
 
 
         list.setAdapter(mAdapter);
+
+        /********************************************************/
+        /********************** NEW TOOLBAR SETUP *******************/
+        /********************************************************/
+        LinearLayout friendsIcon = (LinearLayout) findViewById(R.id.friendsLayoutIcon);
+        LinearLayout messagesIcon = (LinearLayout) findViewById(R.id.messagesLayoutIcon);
+        LinearLayout conversationIcon = (LinearLayout) findViewById(R.id.conversationStartersLayoutIcon);
+        LinearLayout learnMoreIcon = (LinearLayout) findViewById(R.id.learnMoreLayoutIcon);
+        LinearLayout profileIcon = (LinearLayout) findViewById(R.id.profileLayoutIcon);
+
+
+        friendsIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(MessagesActivity.this, SupportActivity.class);
+                startActivity(next);
+            }
+        });
+
+        messagesIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(MessagesActivity.this, MessagesActivity.class);
+                startActivity(next);
+            }
+        });
+
+        conversationIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(MessagesActivity.this, ConversationStarterActivity.class);
+                startActivity(next);
+            }
+        });
+
+        learnMoreIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(MessagesActivity.this, LearnMoreActivity.class);
+                startActivity(next);
+            }
+        });
+
+        profileIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(MessagesActivity.this, EditProfileActivity.class);
+                startActivity(next);
+            }
+        });
+        /********************************************************/
+        /********************************************************/
+        /********************************************************/
 
 
 

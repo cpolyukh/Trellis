@@ -24,6 +24,7 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -108,15 +109,16 @@ public class ConversationStarterActivity extends AppCompatActivity {
 
 
         /********************************************************/
-        /********************** TOOLBAR SETUP *******************/
+        /********************** NEW TOOLBAR SETUP *******************/
         /********************************************************/
-        ImageButton supportIcon = (ImageButton) findViewById(R.id.supportIcon);
-        ImageButton messageIcon = (ImageButton) findViewById(R.id.messageIcon);
-        ImageButton conversationIcon = (ImageButton) findViewById(R.id.conversationIcon);
-        ImageButton readMoreIcon = (ImageButton) findViewById(R.id.readMoreIcon);
-        ImageButton settingsIcon = (ImageButton) findViewById(R.id.settingsIcon);
+        LinearLayout friendsIcon = (LinearLayout) findViewById(R.id.friendsLayoutIcon);
+        LinearLayout messagesIcon = (LinearLayout) findViewById(R.id.messagesLayoutIcon);
+        LinearLayout conversationIcon = (LinearLayout) findViewById(R.id.conversationStartersLayoutIcon);
+        LinearLayout learnMoreIcon = (LinearLayout) findViewById(R.id.learnMoreLayoutIcon);
+        LinearLayout profileIcon = (LinearLayout) findViewById(R.id.profileLayoutIcon);
 
-        supportIcon.setOnClickListener(new View.OnClickListener() {
+
+        friendsIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(ConversationStarterActivity.this, SupportActivity.class);
@@ -124,7 +126,7 @@ public class ConversationStarterActivity extends AppCompatActivity {
             }
         });
 
-        messageIcon.setOnClickListener(new View.OnClickListener() {
+        messagesIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(ConversationStarterActivity.this, MessagesActivity.class);
@@ -140,7 +142,7 @@ public class ConversationStarterActivity extends AppCompatActivity {
             }
         });
 
-        readMoreIcon.setOnClickListener(new View.OnClickListener() {
+        learnMoreIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(ConversationStarterActivity.this, LearnMoreActivity.class);
@@ -148,7 +150,7 @@ public class ConversationStarterActivity extends AppCompatActivity {
             }
         });
 
-        settingsIcon.setOnClickListener(new View.OnClickListener() {
+        profileIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(ConversationStarterActivity.this, EditProfileActivity.class);
@@ -158,6 +160,8 @@ public class ConversationStarterActivity extends AppCompatActivity {
         /********************************************************/
         /********************************************************/
         /********************************************************/
+
+
     }
 
     private static class MySpinnerAdapter<String> extends ArrayAdapter<String> {

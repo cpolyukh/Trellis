@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class LearnMoreActivity extends AppCompatActivity {
@@ -35,16 +36,18 @@ public class LearnMoreActivity extends AppCompatActivity {
 
         app = (MainApp) getApplication();
 
-        /********************************************************/
-        /********************** TOOLBAR SETUP *******************/
-        /********************************************************/
-        ImageButton supportIcon = (ImageButton) findViewById(R.id.supportIcon);
-        ImageButton messageIcon = (ImageButton) findViewById(R.id.messageIcon);
-        ImageButton conversationIcon = (ImageButton) findViewById(R.id.conversationIcon);
-        ImageButton readMoreIcon = (ImageButton) findViewById(R.id.readMoreIcon);
-        ImageButton settingsIcon = (ImageButton) findViewById(R.id.settingsIcon);
 
-        supportIcon.setOnClickListener(new View.OnClickListener() {
+        /********************************************************/
+        /********************** NEW TOOLBAR SETUP *******************/
+        /********************************************************/
+        LinearLayout friendsIcon = (LinearLayout) findViewById(R.id.friendsLayoutIcon);
+        LinearLayout messagesIcon = (LinearLayout) findViewById(R.id.messagesLayoutIcon);
+        LinearLayout conversationIcon = (LinearLayout) findViewById(R.id.conversationStartersLayoutIcon);
+        LinearLayout learnMoreIcon = (LinearLayout) findViewById(R.id.learnMoreLayoutIcon);
+        LinearLayout profileIcon = (LinearLayout) findViewById(R.id.profileLayoutIcon);
+
+
+        friendsIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(LearnMoreActivity.this, SupportActivity.class);
@@ -52,7 +55,7 @@ public class LearnMoreActivity extends AppCompatActivity {
             }
         });
 
-        messageIcon.setOnClickListener(new View.OnClickListener() {
+        messagesIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(LearnMoreActivity.this, MessagesActivity.class);
@@ -68,7 +71,7 @@ public class LearnMoreActivity extends AppCompatActivity {
             }
         });
 
-        readMoreIcon.setOnClickListener(new View.OnClickListener() {
+        learnMoreIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(LearnMoreActivity.this, LearnMoreActivity.class);
@@ -76,7 +79,7 @@ public class LearnMoreActivity extends AppCompatActivity {
             }
         });
 
-        settingsIcon.setOnClickListener(new View.OnClickListener() {
+        profileIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(LearnMoreActivity.this, EditProfileActivity.class);
@@ -86,6 +89,10 @@ public class LearnMoreActivity extends AppCompatActivity {
         /********************************************************/
         /********************************************************/
         /********************************************************/
+
+
+
+
 
         ImageView article1 = (ImageView) findViewById(R.id.support1);
         ImageView article2 = (ImageView) findViewById(R.id.support2);
