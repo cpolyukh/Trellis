@@ -1,6 +1,7 @@
 package edu.uw.ischool.trellis;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.io.Serializable;
 
@@ -52,6 +54,14 @@ public class SupportSelectionActivity extends AppCompatActivity implements Seria
             }
         });
 
+        Typeface myTypeface = Typeface.createFromAsset(getAssets(), "Futura.ttc");
+        TextView textView1 = (TextView) findViewById(R.id.welcome);
+        TextView textView2 = (TextView) findViewById(R.id.welcomemessage);
+
+        textView1.setTypeface(myTypeface);
+        textView2.setTypeface(myTypeface);
+        seekSupportBtn.setTypeface(myTypeface);
+        giveSupportBtn.setTypeface(myTypeface);
 
     }
 

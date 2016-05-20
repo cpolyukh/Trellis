@@ -18,6 +18,8 @@ public class User implements Serializable {
     private boolean isSupporter;
     private JSONArray friends;
     private String id;
+    private List<String> supportSkills;
+    private List<String> conversationTopics;
 
 
     public User(String firstName, String lastName, String quote, String bio, boolean isSupporter, String friends, String id){
@@ -26,6 +28,10 @@ public class User implements Serializable {
         this.quote = quote;
         this.bio = bio;
         this.id = id;
+        this.supportSkills = new ArrayList<String>();
+        supportSkills.add("-Add any support skills you have to offer!");
+        this.conversationTopics = new ArrayList<String>();
+        conversationTopics.add("-Add any topics of conversation you feel confortable discussing!");
         try {
             this.friends = new JSONArray(friends);
         } catch (JSONException e) {
@@ -91,6 +97,73 @@ public class User implements Serializable {
     public void setId(String id) {
         this.id = id;
     }
+
+    public List<String> getSupportSkills() {
+        return supportSkills;
+    }
+
+    public String[] getSupportSkillsArray() {
+        String[] result = new String[supportSkills.size()];
+
+        for (int i = 0; i < supportSkills.size(); i++) {
+            String current = supportSkills.get(i);
+
+            result[i] = current;
+        }
+
+        return result;
+    }
+
+    public void setSupportSkills(List<String> supportSkills) {
+        this.supportSkills = supportSkills;
+    }
+
+    public void addSupportSkill(String newSkill) {
+        this.supportSkills.add(newSkill);
+    }
+
+    public void deleteSupportSkill(String skillToDelete) {
+
+        for (int i = 0; i < supportSkills.size(); i++) {
+            if (supportSkills.get(i).equals(skillToDelete)) {
+                supportSkills.remove(i);
+            }
+        }
+    }
+
+    public List<String> getConversationTopics() {
+        return conversationTopics;
+    }
+
+    public String[] getConversationTopicsArray() {
+        String[] result = new String[conversationTopics.size()];
+
+        for (int i = 0; i < conversationTopics.size(); i++) {
+            String current = conversationTopics.get(i);
+
+            result[i] = current;
+        }
+
+        return result;
+    }
+
+    public void setConversationTopics(List<String> conversationTopics) {
+        this.conversationTopics = conversationTopics;
+    }
+
+    public void addSupportConversationTopic(String newTopic) {
+        this.conversationTopics.add(newTopic);
+    }
+
+    public void deleteConversationTopic(String topicToDelete) {
+
+        for (int i = 0; i < conversationTopics.size(); i++) {
+            if (conversationTopics.get(i).equals(topicToDelete)) {
+                conversationTopics.remove(i);
+            }
+        }
+    }
+
 
     public String getImageUrl() {
         return  "https://graph.facebook.com/" + id + "/picture?type=large";
