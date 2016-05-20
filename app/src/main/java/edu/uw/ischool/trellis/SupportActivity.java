@@ -102,30 +102,30 @@ public class SupportActivity extends AppCompatActivity {
         final ListView lstSupporters = (ListView) findViewById(R.id.lstSupporters);
 
 
-        mySupportBtn.setBackgroundColor(getResources().getColor(R.color.mini_header));
-        findSupportBtn.setBackgroundColor(getResources().getColor(R.color.header));
+        findSupportBtn.setBackgroundColor(getResources().getColor(R.color.mini_header));
+        mySupportBtn.setBackgroundColor(getResources().getColor(R.color.header));
 
 
-        mySupportBtn.setOnClickListener(new View.OnClickListener() {
+        findSupportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mySupportBtn.setBackgroundColor(getResources().getColor(R.color.header));
                 findSupportBtn.setBackgroundColor(getResources().getColor(R.color.mini_header));
-                findSupportBtn.setTextColor(getResources().getColor(R.color.text_dark));
+                mySupportBtn.setBackgroundColor(getResources().getColor(R.color.header));
                 mySupportBtn.setTextColor(getResources().getColor(R.color.text_light));
-                lstSupporters.setVisibility(View.INVISIBLE);
+                findSupportBtn.setTextColor(getResources().getColor(R.color.text_dark));
+                lstSupporters.setVisibility(View.VISIBLE);
             }
         });
 
 
-        findSupportBtn.setOnClickListener(new View.OnClickListener() {
+        mySupportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mySupportBtn.setBackgroundColor(getResources().getColor(R.color.mini_header));
                 findSupportBtn.setBackgroundColor(getResources().getColor(R.color.header));
                 mySupportBtn.setTextColor(getResources().getColor(R.color.text_dark));
                 findSupportBtn.setTextColor(getResources().getColor(R.color.text_light));
-                lstSupporters.setVisibility(View.VISIBLE);
+                lstSupporters.setVisibility(View.INVISIBLE);
             }
         });
 
