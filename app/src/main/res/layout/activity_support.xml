@@ -45,16 +45,11 @@
             android:layout_height="match_parent"
             android:id="@+id/lstSupporters" />
     </FrameLayout>
-    
-</LinearLayout>
-
-
-    </RelativeLayout>
-
 
     <include layout="@layout/toolbar"/>
 
+</LinearLayout>
 
 
-</RelativeLayout>
+
 
