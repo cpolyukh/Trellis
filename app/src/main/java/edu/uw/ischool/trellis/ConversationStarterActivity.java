@@ -184,7 +184,7 @@ public class ConversationStarterActivity extends AppCompatActivity {
             view.setTextColor(Color.parseColor("#fafafa"));
             view.setBackgroundColor(Color.parseColor("#647753"));
             view.setTextSize(15);
-            view.setPadding(100, 5, 20, 5);
+            view.setPadding(100, 0, 20, 0);
             return view;
         }
 
@@ -194,8 +194,9 @@ public class ConversationStarterActivity extends AppCompatActivity {
             TextView view = (TextView) super.getDropDownView(position, convertView, parent);
             view.setTypeface(font);
             view.setBackgroundColor(Color.parseColor("#647753"));
+            view.setTextColor(Color.parseColor("#fafafa"));
             view.setTextSize(15);
-            view.setPadding(100, 5, 20, 5);
+            view.setPadding(100, 0, 20, 0);
             return view;
         }
     }
