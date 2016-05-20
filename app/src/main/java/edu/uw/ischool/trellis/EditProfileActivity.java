@@ -57,7 +57,12 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-        TextView[] textViews = {(TextView) findViewById(R.id.textView17), (TextView) findViewById(R.id.textView22),
+        TextView usernameView = (TextView) findViewById(R.id.textView);
+        TextView quoteView = (TextView) findViewById(R.id.textView9);
+
+
+        TextView[] textViews = {usernameView, quoteView,
+                (TextView) findViewById(R.id.textView17), (TextView) findViewById(R.id.textView22),
                 (TextView) findViewById(R.id.textView26), (TextView) findViewById(R.id.textView27)};
 
         Typeface myTypeface = Typeface.createFromAsset(getAssets(), "Futura.ttc");
@@ -66,6 +71,7 @@ public class EditProfileActivity extends AppCompatActivity {
             current.setTypeface(myTypeface);
         }
 
+        editButton.setTypeface(myTypeface);
 
         mainApp = (MainApp) getApplication();
         currentUser = mainApp.getCurrentUser();
@@ -83,12 +89,18 @@ public class EditProfileActivity extends AppCompatActivity {
         currentUser = mainApp.getCurrentUser();
         conversationTopicList = (ListView) findViewById(R.id.conversationTopicsListView);
 
+        usernameView.setText(currentUser.getFirstName());
+        quoteView.setText(currentUser.getQuote());
+
         List<String> conversationTopicsList = currentUser.getConversationTopics();
 
         MyArrayAdapter<String> conversationTopicsAdapter = new MyArrayAdapter<>(getBaseContext(),
                 android.R.layout.simple_expandable_list_item_1, conversationTopicsList);
 
         conversationTopicList.setAdapter(conversationTopicsAdapter);
+
+
+
 
         /********************************************************/
         /********************** NEW TOOLBAR SETUP *******************/
@@ -164,6 +176,7 @@ public class EditProfileActivity extends AppCompatActivity {
             view.setTypeface(font);
             view.setTextColor(Color.parseColor("#6d6d6d"));
             view.setTextSize(15);
+            view.setPadding(10, 0, 10, 0);
             return view;
         }
 

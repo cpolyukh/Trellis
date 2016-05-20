@@ -29,9 +29,9 @@ public class User implements Serializable {
         this.bio = bio;
         this.id = id;
         this.supportSkills = new ArrayList<String>();
-        supportSkills.add("-Add any support skills you have to offer!");
+        supportSkills.add("- Add any support skills you have to offer!");
         this.conversationTopics = new ArrayList<String>();
-        conversationTopics.add("-Add any topics of conversation you feel confortable discussing!");
+        conversationTopics.add("- Add any topics of conversation you feel confortable discussing!");
         try {
             this.friends = new JSONArray(friends);
         } catch (JSONException e) {
