@@ -1,17 +1,36 @@
 package edu.uw.ischool.trellis;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
+import java.util.List;
+
+import edu.uw.ischool.trellis.UI.EditProfileUpdateActivity;
 
 public class EditProfileActivity extends AppCompatActivity {
+    ListView supportSkillList;
+    ListView conversationTopicList;
+    MainApp mainApp;
+    User currentUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,26 +39,59 @@ public class EditProfileActivity extends AppCompatActivity {
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        Button doneBtn = (Button) findViewById(R.id.doneBtn);
-
-        doneBtn.setOnClickListener(new View.OnClickListener() {
+        Button editButton = (Button) findViewById(R.id.editButton);
+        editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent next = new Intent(EditProfileActivity.this, LearnMoreActivity.class);
+                Intent next = new Intent(EditProfileActivity.this, EditProfileUpdateActivity.class);
                 startActivity(next);
             }
         });
 
-        /********************************************************/
-        /********************** TOOLBAR SETUP *******************/
-        /********************************************************/
-        ImageButton supportIcon = (ImageButton) findViewById(R.id.supportIcon);
-        ImageButton messageIcon = (ImageButton) findViewById(R.id.messageIcon);
-        ImageButton conversationIcon = (ImageButton) findViewById(R.id.conversationIcon);
-        ImageButton readMoreIcon = (ImageButton) findViewById(R.id.readMoreIcon);
-        ImageButton settingsIcon = (ImageButton) findViewById(R.id.settingsIcon);
+        TextView[] textViews = {(TextView) findViewById(R.id.textView17), (TextView) findViewById(R.id.textView22),
+                (TextView) findViewById(R.id.textView26), (TextView) findViewById(R.id.textView27)};
 
-        supportIcon.setOnClickListener(new View.OnClickListener() {
+        Typeface myTypeface = Typeface.createFromAsset(getAssets(), "Futura.ttc");
+        for (TextView current : textViews)
+        {
+            current.setTypeface(myTypeface);
+        }
+
+
+        mainApp = (MainApp) getApplication();
+        currentUser = mainApp.getCurrentUser();
+        supportSkillList = (ListView) findViewById(R.id.supportSkillListView);
+
+        List<String> supportSkillsList = currentUser.getSupportSkills();
+
+        MyArrayAdapter<String> supportAdapter = new MyArrayAdapter<>(getBaseContext(),
+                android.R.layout.simple_expandable_list_item_1, supportSkillsList);
+
+        supportSkillList.setAdapter(supportAdapter);
+
+
+        mainApp = (MainApp) getApplication();
+        currentUser = mainApp.getCurrentUser();
+        conversationTopicList = (ListView) findViewById(R.id.conversationTopicsListView);
+
+        List<String> conversationTopicsList = currentUser.getConversationTopics();
+
+        MyArrayAdapter<String> conversationTopicsAdapter = new MyArrayAdapter<>(getBaseContext(),
+                android.R.layout.simple_expandable_list_item_1, conversationTopicsList);
+
+        conversationTopicList.setAdapter(conversationTopicsAdapter);
+
+        /********************************************************/
+        /********************** NEW TOOLBAR SETUP *******************/
+        /********************************************************/
+        LinearLayout friendsIcon = (LinearLayout) findViewById(R.id.friendsLayoutIcon);
+        LinearLayout messagesIcon = (LinearLayout) findViewById(R.id.messagesLayoutIcon);
+        LinearLayout conversationIcon = (LinearLayout) findViewById(R.id.conversationStartersLayoutIcon);
+        LinearLayout learnMoreIcon = (LinearLayout) findViewById(R.id.learnMoreLayoutIcon);
+        LinearLayout profileIcon = (LinearLayout) findViewById(R.id.profileLayoutIcon);
+
+
+        friendsIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(EditProfileActivity.this, SupportActivity.class);
@@ -47,7 +99,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-        messageIcon.setOnClickListener(new View.OnClickListener() {
+        messagesIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(EditProfileActivity.this, MessagesActivity.class);
@@ -63,7 +115,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-        readMoreIcon.setOnClickListener(new View.OnClickListener() {
+        learnMoreIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(EditProfileActivity.this, LearnMoreActivity.class);
@@ -71,7 +123,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-        settingsIcon.setOnClickListener(new View.OnClickListener() {
+        profileIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(EditProfileActivity.this, EditProfileActivity.class);
@@ -81,6 +133,30 @@ public class EditProfileActivity extends AppCompatActivity {
         /********************************************************/
         /********************************************************/
         /********************************************************/
+
+    }
+
+    private static class MyArrayAdapter<String> extends ArrayAdapter<String> {
+        // Initialise custom font, for example:
+        Typeface font = Typeface.createFromAsset(getContext().getAssets(),
+                "Futura.ttc");
+
+        // (In reality I used a manager which caches the Typeface objects)
+        // Typeface font = FontManager.getInstance().getFont(getContext(), BLAMBOT);
+
+        private MyArrayAdapter(Context context, int resource, List<String> items) {
+            super(context, resource, items);
+        }
+
+        // Affects default (closed) state of the spinner
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            TextView view = (TextView) super.getView(position, convertView, parent);
+            view.setTypeface(font);
+            view.setTextColor(Color.parseColor("#6d6d6d"));
+            view.setTextSize(15);
+            return view;
+        }
 
     }
 

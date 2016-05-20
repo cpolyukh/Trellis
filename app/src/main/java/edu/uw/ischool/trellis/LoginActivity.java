@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -57,6 +59,11 @@ public class LoginActivity extends AppCompatActivity {
 
         app = (MainApp) getApplication();
 
+
+        Typeface myTypeface = Typeface.createFromAsset(getAssets(), "Futura.ttc");
+        Button guestButton = (Button) findViewById(R.id.guestButton);
+
+        guestButton.setTypeface(myTypeface);
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("public_profile", "user_friends");
@@ -117,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                 ).executeAsync();
 
-                Intent next = new Intent(LoginActivity.this, EditProfileActivity.class);
+                Intent next = new Intent(LoginActivity.this, SupportSelectionActivity.class);
                 startActivity(next);
             }
 
