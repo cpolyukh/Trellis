@@ -42,8 +42,11 @@ public class ConversationStarterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation_starter);
+        overridePendingTransition(R.anim.sendbird_slide_in_from_bottom, R.anim.sendbird_slide_out_to_top);
 
         app = (MainApp) getApplication();
+
+        app.changeStatusBarColor(this);
 
         dropdown = (Spinner) findViewById(R.id.spinner);
         final String[] categories = ConversationCategory.getConversationStarterTitlesArray();

@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="status_bar" type="color">#35444d</item>
+    <item name="mini_header" type="color">#bac4d1</item>
+    <item name="header" type="color">#5d7074</item>
+    <item name="text_light" type="color">#fafafa</item>
+    <item name="text_dark" type="color">#4d4d4d</item>
 </resources>

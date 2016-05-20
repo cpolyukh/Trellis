@@ -15,12 +15,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -29,6 +33,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -57,6 +62,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -109,6 +115,7 @@ public class ChatActivity extends FragmentActivity {
 
     private SendBirdChatFragment mSendBirdChatFragment;
     private SendBirdChatAdapter mSendBirdChatAdapter;
+    private SimpleAdapter mSimpleAdapter;
 
     private TextView mTxtChannelUrl;
     private View mTopBarContainer;
@@ -117,8 +124,7 @@ public class ChatActivity extends FragmentActivity {
     private Bundle mSendBirdInfo;
     private String mChannelUrl;
     private boolean mDoNotDisconnect;
-
-
+    MainApp app;
 
     private boolean isUploading;
     private boolean isForeground;
@@ -128,41 +134,106 @@ public class ChatActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.sendbird_slide_in_from_bottom, R.anim.sendbird_slide_out_to_top);
-        setContentView(R.layout.activity_sendbird_chat);
+        setContentView(R.layout.messaging_test);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        app = (MainApp) getApplication();
 
-        SendBird.queryMessageList(mChannelUrl).prev(Long.MAX_VALUE, 50, new MessageListQuery.MessageListQueryResult() {
+        app.changeStatusBarColor(this);
+
+        ListView list = (ListView) findViewById(R.id.list);
+        list.setDivider(null);
+
+        Button send = (Button) findViewById(R.id.btn_send);
+        ImageButton closeBtn = (ImageButton) findViewById(R.id.btn_close);
+
+        mSimpleAdapter = new SimpleAdapter(this, app.getCurrentUser());
+        list.setAdapter(mSimpleAdapter);
+
+        send.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResult(List<MessageModel> messageModels) {
-                for (MessageModel model : messageModels) {
-                    mSendBirdChatAdapter.addMessageModel(model);
-                }
+            public void onClick(View v) {
 
+                EditText message = (EditText) findViewById(R.id.etxt_message);
+                mSimpleAdapter.mItemList.add(message.getText().toString());
+                mSimpleAdapter.notifyDataSetChanged();
+                message.setText("");
 
-                mSendBirdChatAdapter.notifyDataSetChanged();
-                mSendBirdChatFragment.mListView.setSelection(mSendBirdChatAdapter.getCount());
-                SendBird.join(mChannelUrl);
-                SendBird.connect(mSendBirdChatAdapter.getMaxMessageTimestamp());
+                // hide keyboard
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
             }
+        });
 
+        closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onError(Exception e) {
-
+            public void onClick(View v) {
+                finish();
             }
         });
 
         Intent intent = getIntent();
-
-        initFragment();
-        initSendBird(getIntent().getExtras());
-
-
         String userName = intent.getStringExtra("user");
         TextView channel = (TextView) findViewById(R.id.txt_channel_url);
 
         channel.setText(userName);
 
     }
+
+
+
+    public class SimpleAdapter extends BaseAdapter {
+        private final Context mContext;
+        private final LayoutInflater mInflater;
+        final List<String> mItemList;
+        private User user;
+
+
+        public SimpleAdapter(Context context, edu.uw.ischool.trellis.User user) {
+            mContext = context;
+            mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            mItemList = new ArrayList<>();
+            this.user = user;
+        }
+
+        @Override
+        public int getCount() {
+            return mItemList.size();
+        }
+
+        @Override
+        public String getItem(int position) {
+            return mItemList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            String message = getItem(position);
+
+            View rowView = mInflater.inflate(R.layout.sendbird_view_messaging_message, parent, false);
+            ImageView img = (ImageView) rowView.findViewById(R.id.img_right_thumbnail);
+            TextView msgTxt = (TextView) rowView.findViewById(R.id.txt_right);
+
+            displayUrlImage(img, user.getImageUrl());
+
+            msgTxt.setText(message);
+
+
+            return rowView;
+        }
+
+
+    }
+
+
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -188,7 +259,296 @@ public class ChatActivity extends FragmentActivity {
     }
 
 
+    private static void displayUrlImage(ImageView imageView, String url) {
+        UrlDownloadAsyncTask.display(url, imageView);
+    }
 
+    private static class UrlDownloadAsyncTask extends AsyncTask<Void, Void, Object> {
+        private static LRUCache cache = new LRUCache((int) (Runtime.getRuntime().maxMemory() / 16)); // 1/16th of the maximum memory.
+        private final UrlDownloadAsyncTaskHandler handler;
+        private String url;
+
+        public static void download(String url, final File downloadFile, final Context context) {
+            UrlDownloadAsyncTask task = new UrlDownloadAsyncTask(url, new UrlDownloadAsyncTaskHandler() {
+                @Override
+                public void onPreExecute() {
+                    Toast.makeText(context, "Start downloading", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public Object doInBackground(File file) {
+                    if(file == null) {
+                        return null;
+                    }
+
+                    try {
+                        BufferedInputStream in = null;
+                        BufferedOutputStream out = null;
+
+                        //create output directory if it doesn't exist
+                        File dir = downloadFile.getParentFile();
+                        if (!dir.exists()) {
+                            dir.mkdirs();
+                        }
+
+                        in = new BufferedInputStream(new FileInputStream(file));
+                        out = new BufferedOutputStream(new FileOutputStream(downloadFile));
+
+                        byte[] buffer = new byte[1024 * 100];
+                        int read;
+                        while ((read = in.read(buffer)) != -1) {
+                            out.write(buffer, 0, read);
+                        }
+                        in.close();
+                        out.flush();
+                        out.close();
+
+                        return downloadFile;
+                    } catch(IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    return null;
+                }
+
+                @Override
+                public void onPostExecute(Object object, UrlDownloadAsyncTask task) {
+                    if(object != null && object instanceof File) {
+                        Toast.makeText(context, "Finish downloading: " + ((File)object).getAbsolutePath(), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(context, "Error downloading", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            } else {
+                task.execute();
+            }
+        }
+
+        public static void display(String url, final ImageView imageView) {
+            UrlDownloadAsyncTask task = null;
+
+            if(imageView.getTag() != null && imageView.getTag() instanceof UrlDownloadAsyncTask) {
+                try {
+                    task = (UrlDownloadAsyncTask) imageView.getTag();
+                    task.cancel(true);
+                } catch(Exception e) {}
+
+                imageView.setTag(null);
+            }
+
+            task = new UrlDownloadAsyncTask(url, new UrlDownloadAsyncTaskHandler() {
+                @Override
+                public void onPreExecute() {
+                    imageView.setImageResource(R.drawable.sendbird_img_placeholder);
+                }
+
+                @Override
+                public Object doInBackground(File file) {
+                    if(file == null) {
+                        return null;
+                    }
+
+                    Bitmap bm = null;
+                    try {
+                        int targetHeight = 500;
+                        int targetWidth = 500;
+
+                        BufferedInputStream bin = new BufferedInputStream(new FileInputStream(file));
+                        bin.mark(bin.available());
+
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        options.inJustDecodeBounds = true;
+                        BitmapFactory.decodeStream(bin, null, options);
+
+                        Boolean scaleByHeight = Math.abs(options.outHeight - targetHeight) >= Math.abs(options.outWidth - targetWidth);
+
+                        if(options.outHeight * options.outWidth >= targetHeight * targetWidth) {
+                            double sampleSize = scaleByHeight
+                                    ? options.outHeight / targetHeight
+                                    : options.outWidth / targetWidth;
+                            options.inSampleSize = (int)Math.pow(2d, Math.floor(Math.log(sampleSize)/Math.log(2d)));
+                        }
+
+                        try {
+                            bin.reset();
+                        } catch(IOException e) {
+                            bin = new BufferedInputStream(new FileInputStream(file));
+                        }
+
+                        // Do the actual decoding
+                        options.inJustDecodeBounds = false;
+                        bm = BitmapFactory.decodeStream(bin, null, options);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    return getCroppedBitmap(bm, 256);
+                }
+
+                @Override
+                public void onPostExecute(Object object, UrlDownloadAsyncTask task) {
+                    if(object != null && object instanceof Bitmap && imageView.getTag() == task) {
+                        imageView.setImageBitmap((Bitmap)object);
+                    }
+                }
+            });
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            } else {
+                task.execute();
+            }
+
+            imageView.setTag(task);
+        }
+
+        public UrlDownloadAsyncTask(String url, UrlDownloadAsyncTaskHandler handler) {
+            this.handler = handler;
+            this.url = url;
+        }
+
+        public interface UrlDownloadAsyncTaskHandler {
+            public void onPreExecute();
+            public Object doInBackground(File file);
+            public void onPostExecute(Object object, UrlDownloadAsyncTask task);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            if(handler != null) {
+                handler.onPreExecute();
+            }
+        }
+
+        public static Bitmap getCroppedBitmap(Bitmap bmp, int radius) {
+            Bitmap sbmp;
+
+            if (bmp.getWidth() != radius || bmp.getHeight() != radius) {
+                float smallest = Math.min(bmp.getWidth(), bmp.getHeight());
+                float factor = smallest / radius;
+                sbmp = Bitmap.createScaledBitmap(bmp, (int)(bmp.getWidth() / factor), (int)(bmp.getHeight() / factor), false);
+            } else {
+                sbmp = bmp;
+            }
+
+            Bitmap output = Bitmap.createBitmap(radius, radius,
+                    Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(output);
+
+            final int color = 0xffa19774;
+            final Paint paint = new Paint();
+            final Rect rect = new Rect(0, 0, radius, radius);
+
+            paint.setAntiAlias(true);
+            paint.setFilterBitmap(true);
+            paint.setDither(true);
+            canvas.drawARGB(0, 0, 0, 0);
+            paint.setColor(Color.parseColor("#BAB399"));
+            canvas.drawCircle(radius / 2 + 0.7f,
+                    radius / 2 + 0.7f, radius / 2 + 0.1f, paint);
+            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+            canvas.drawBitmap(sbmp, rect, rect, paint);
+
+            return output;
+        }
+
+        protected Object doInBackground(Void... args) {
+            File outFile = null;
+            try {
+                if(cache.get(url) != null && new File(cache.get(url)).exists()) { // Cache Hit
+                    outFile = new File(cache.get(url));
+                } else { // Cache Miss, Downloading a file from the url.
+                    outFile = File.createTempFile("sendbird-download", ".tmp");
+                    OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(outFile));
+
+                    InputStream input = new BufferedInputStream(new URL(url).openStream());
+                    byte[] buf = new byte[1024 * 100];
+                    int read = 0;
+                    while ((read = input.read(buf, 0, buf.length)) >= 0) {
+                        outputStream.write(buf, 0, read);
+                    }
+
+                    outputStream.flush();
+                    outputStream.close();
+                    cache.put(url, outFile.getAbsolutePath());
+                }
+
+
+
+            } catch(IOException e) {
+                e.printStackTrace();
+
+                if(outFile != null) {
+                    outFile.delete();
+                }
+
+                outFile = null;
+            }
+
+
+            if(handler != null) {
+                return handler.doInBackground(outFile);
+            }
+
+            return outFile;
+        }
+
+        protected void onPostExecute(Object result) {
+            if(handler != null) {
+                handler.onPostExecute(result, this);
+            }
+        }
+
+        private static class LRUCache {
+            private final int maxSize;
+            private int totalSize;
+            private ConcurrentLinkedQueue<String> queue;
+            private ConcurrentHashMap<String, String> map;
+
+            public LRUCache(final int maxSize) {
+                this.maxSize = maxSize;
+                this.queue	= new ConcurrentLinkedQueue<String>();
+                this.map	= new ConcurrentHashMap<String, String>();
+            }
+
+            public String get(final String key) {
+                if (map.containsKey(key)) {
+                    queue.remove(key);
+                    queue.add(key);
+                }
+
+                return map.get(key);
+            }
+
+            public synchronized void put(final String key, final String value) {
+                if(key == null || value == null) {
+                    throw new NullPointerException();
+                }
+
+                if (map.containsKey(key)) {
+                    queue.remove(key);
+                }
+
+                queue.add(key);
+                map.put(key, value);
+                totalSize = totalSize + getSize(value);
+
+                while (totalSize >= maxSize) {
+                    String expiredKey = queue.poll();
+                    if (expiredKey != null) {
+                        totalSize = totalSize - getSize(map.remove(expiredKey));
+                    }
+                }
+            }
+
+            private int getSize(String value) {
+                return value.length();
+            }
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -203,7 +563,6 @@ public class ChatActivity extends FragmentActivity {
                 }
             }
         }
-
     }
 
     @Override
@@ -366,6 +725,8 @@ public class ChatActivity extends FragmentActivity {
                 .commit();
     }
 
+
+
     public static class SendBirdChatFragment extends Fragment {
         private static final int REQUEST_PICK_IMAGE = 100;
 
@@ -446,6 +807,7 @@ public class ChatActivity extends FragmentActivity {
                     if(keyCode == KeyEvent.KEYCODE_ENTER) {
                         if(event.getAction() == KeyEvent.ACTION_DOWN) {
                             send();
+
                         }
                         return true; // Do not hide keyboard.
                     }
@@ -545,6 +907,9 @@ public class ChatActivity extends FragmentActivity {
             if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 Helper.hideKeyboard(getActivity());
             }
+
+            Toast.makeText(getActivity(), "Wow sending this is great", Toast.LENGTH_LONG).show();
+
 
 
         }
@@ -936,13 +1301,7 @@ public class ChatActivity extends FragmentActivity {
         return DateFormat.getDateFormat(context).format(date) + " " + DateFormat.getTimeFormat(context).format(date);
     }
 
-    private static void displayUrlImage(ImageView imageView, String url) {
-        UrlDownloadAsyncTask.display(url, imageView, false);
-    }
 
-    private static void displayUrlImage(ImageView imageView, String url, boolean circle) {
-        UrlDownloadAsyncTask.display(url, imageView, true);
-    }
 
     private static void downloadUrl(FileLink fileLink, Context context) throws IOException {
         String url = fileLink.getFileInfo().getUrl();
@@ -952,268 +1311,6 @@ public class ChatActivity extends FragmentActivity {
         UrlDownloadAsyncTask.download(url, downloadFile, context);
     }
 
-    private static class UrlDownloadAsyncTask extends AsyncTask<Void, Void, Object> {
-        private static LRUCache cache = new LRUCache((int) (Runtime.getRuntime().maxMemory() / 16)); // 1/16th of the maximum memory.
-        private final UrlDownloadAsyncTaskHandler handler;
-        private String url;
-
-
-        public static void download(String url, final File downloadFile, final Context context) {
-            UrlDownloadAsyncTask task = new UrlDownloadAsyncTask(url, new UrlDownloadAsyncTaskHandler() {
-                @Override
-                public void onPreExecute() {
-                    Toast.makeText(context, "Start downloading", Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public Object doInBackground(File file) {
-                    if (file == null) {
-                        return null;
-                    }
-
-                    try {
-                        BufferedInputStream in = null;
-                        BufferedOutputStream out = null;
-
-                        //create output directory if it doesn't exist
-                        File dir = downloadFile.getParentFile();
-                        if (!dir.exists()) {
-                            dir.mkdirs();
-                        }
-
-                        in = new BufferedInputStream(new FileInputStream(file));
-                        out = new BufferedOutputStream(new FileOutputStream(downloadFile));
-
-                        byte[] buffer = new byte[1024 * 100];
-                        int read;
-                        while ((read = in.read(buffer)) != -1) {
-                            out.write(buffer, 0, read);
-                        }
-                        in.close();
-                        out.flush();
-                        out.close();
-
-                        return downloadFile;
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    return null;
-                }
-
-                @Override
-                public void onPostExecute(Object object, UrlDownloadAsyncTask task) {
-                    if (object != null && object instanceof File) {
-                        Toast.makeText(context, "Finish downloading: " + ((File) object).getAbsolutePath(), Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(context, "Error downloading", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            } else {
-                task.execute();
-            }
-        }
-
-        public static void display(String url, final ImageView imageView, final boolean circle) {
-            UrlDownloadAsyncTask task = null;
-
-            if (imageView.getTag() != null && imageView.getTag() instanceof UrlDownloadAsyncTask) {
-                try {
-                    task = (UrlDownloadAsyncTask) imageView.getTag();
-                    task.cancel(true);
-                } catch (Exception e) {
-                }
-
-                imageView.setTag(null);
-            }
-
-            task = new UrlDownloadAsyncTask(url, new UrlDownloadAsyncTaskHandler() {
-                @Override
-                public void onPreExecute() {
-                }
-
-                @Override
-                public Object doInBackground(File file) {
-                    if (file == null) {
-                        return null;
-                    }
-
-                    Bitmap bm = null;
-                    try {
-                        int targetHeight = 256;
-                        int targetWidth = 256;
-
-                        BufferedInputStream bin = new BufferedInputStream(new FileInputStream(file));
-                        bin.mark(bin.available());
-
-                        BitmapFactory.Options options = new BitmapFactory.Options();
-                        options.inJustDecodeBounds = true;
-                        BitmapFactory.decodeStream(bin, null, options);
-
-                        Boolean scaleByHeight = Math.abs(options.outHeight - targetHeight) >= Math.abs(options.outWidth - targetWidth);
-
-                        if (options.outHeight * options.outWidth >= targetHeight * targetWidth) {
-                            double sampleSize = scaleByHeight
-                                    ? options.outHeight / targetHeight
-                                    : options.outWidth / targetWidth;
-                            options.inSampleSize = (int) Math.pow(2d, Math.floor(Math.log(sampleSize) / Math.log(2d)));
-                        }
-
-                        try {
-                            bin.reset();
-                        } catch (IOException e) {
-                            bin = new BufferedInputStream(new FileInputStream(file));
-                        }
-
-                        // Do the actual decoding
-                        options.inJustDecodeBounds = false;
-                        bm = BitmapFactory.decodeStream(bin, null, options);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    return bm;
-                }
-
-                @Override
-                public void onPostExecute(Object object, UrlDownloadAsyncTask task) {
-                    if (object != null && object instanceof Bitmap && imageView.getTag() == task) {
-                        if (circle) {
-                            imageView.setImageDrawable(new RoundedDrawable((Bitmap) object));
-                        } else {
-                            imageView.setImageBitmap((Bitmap) object);
-                        }
-                    } else {
-                        imageView.setImageResource(R.drawable.sendbird_img_placeholder);
-                    }
-                }
-            });
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            } else {
-                task.execute();
-            }
-
-            imageView.setTag(task);
-        }
-
-        public UrlDownloadAsyncTask(String url, UrlDownloadAsyncTaskHandler handler) {
-            this.handler = handler;
-            this.url = url;
-        }
-
-        public interface UrlDownloadAsyncTaskHandler {
-            public void onPreExecute();
-
-            public Object doInBackground(File file);
-
-            public void onPostExecute(Object object, UrlDownloadAsyncTask task);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            if (handler != null) {
-                handler.onPreExecute();
-            }
-        }
-
-        protected Object doInBackground(Void... args) {
-            File outFile = null;
-            try {
-                if (cache.get(url) != null && new File(cache.get(url)).exists()) { // Cache Hit
-                    outFile = new File(cache.get(url));
-                } else { // Cache Miss, Downloading a file from the url.
-                    outFile = File.createTempFile("sendbird-download", ".tmp");
-                    OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(outFile));
-
-                    InputStream input = new BufferedInputStream(new URL(url).openStream());
-                    byte[] buf = new byte[1024 * 100];
-                    int read = 0;
-                    while ((read = input.read(buf, 0, buf.length)) >= 0) {
-                        outputStream.write(buf, 0, read);
-                    }
-
-                    outputStream.flush();
-                    outputStream.close();
-                    cache.put(url, outFile.getAbsolutePath());
-                }
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
-
-                if (outFile != null) {
-                    outFile.delete();
-                }
-
-                outFile = null;
-            }
-
-
-            if (handler != null) {
-                return handler.doInBackground(outFile);
-            }
-
-            return outFile;
-        }
-
-        protected void onPostExecute(Object result) {
-            if (handler != null) {
-                handler.onPostExecute(result, this);
-            }
-        }
-
-        private static class LRUCache {
-            private final int maxSize;
-            private int totalSize;
-            private ConcurrentLinkedQueue<String> queue;
-            private ConcurrentHashMap<String, String> map;
-
-            public LRUCache(final int maxSize) {
-                this.maxSize = maxSize;
-                this.queue = new ConcurrentLinkedQueue<String>();
-                this.map = new ConcurrentHashMap<String, String>();
-            }
-
-            public String get(final String key) {
-                if (map.containsKey(key)) {
-                    queue.remove(key);
-                    queue.add(key);
-                }
-
-                return map.get(key);
-            }
-
-            public synchronized void put(final String key, final String value) {
-                if (key == null || value == null) {
-                    throw new NullPointerException();
-                }
-
-                if (map.containsKey(key)) {
-                    queue.remove(key);
-                }
-
-                queue.add(key);
-                map.put(key, value);
-                totalSize = totalSize + getSize(value);
-
-                while (totalSize >= maxSize) {
-                    String expiredKey = queue.poll();
-                    if (expiredKey != null) {
-                        totalSize = totalSize - getSize(map.remove(expiredKey));
-                    }
-                }
-            }
-
-            private int getSize(String value) {
-                return value.length();
-            }
-        }
-    }
 
     public static class Helper {
         public static String generateDeviceUUID(Context context) {

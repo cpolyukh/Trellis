@@ -54,9 +54,11 @@ public class LoginActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_login);
+        overridePendingTransition(R.anim.sendbird_slide_in_from_bottom, R.anim.sendbird_slide_out_to_top);
+
 
         app = (MainApp) getApplication();
-
+        app.changeStatusBarColor(this);
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("public_profile", "user_friends");
@@ -87,6 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                 final Profile profile = Profile.getCurrentProfile();
                 Log.e("ProfileDataNameF", "--" + profile.getFirstName());
                 Log.e("ProfileDataNameL", "--" + profile.getLastName());
+                Log.e("ProfileDataID", "--" + profile.getId());
 
                 Log.e("Image URI", "--" + profile.getLinkUri());
 
@@ -105,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                                     // Log.e("Dataresponse", "-------------" + response.getJSONObject().getJSONArray("data").toString());
                                     String friends = response.getJSONObject().getJSONArray("data").toString();
                                     Log.e("Dataresponse", "-------------" + friends);
-                                    User user = new User(profile.getFirstName(), profile.getLastName(), "", "", false, friends, "");
+                                    User user = new User(profile.getFirstName(), profile.getLastName(), "", "", false, friends, profile.getId());
                                     Log.e("User", "-------------" + user.toString());
 
                                     app.setCurrentUser(user);

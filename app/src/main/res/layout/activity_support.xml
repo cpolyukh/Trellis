@@ -28,7 +28,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#ffffff"
-                android:text="SUPPORT"
+                android:text="I&apos;VE BEEN SUPPORTING..."
                 />
 
         </RelativeLayout>
@@ -37,13 +37,61 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="1.03"
         >
+
+        <!--<Button-->
+            <!--style="?android:attr/buttonStyleSmall"-->
+            <!--android:layout_width="190dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="MY SUPPORTERS"-->
+            <!--android:id="@+id/button"-->
+            <!--android:layout_gravity="left|top" />-->
+
+        <!--<Button-->
+            <!--android:layout_width="197dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="FIND SUPPORT"-->
+            <!--android:id="@+id/button2"-->
+            <!--android:layout_gravity="right|top" />-->
+
+        <LinearLayout
+            android:id="@+id/btnLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+            <Button
+                android:id="@+id/mySupportBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="MY SUPPORTERS"
+                android:padding="0dp"
+                android:layout_marginLeft="-5dip"
+                android:layout_marginRight="-0dip"
+                android:layout_marginTop="-5dip"
+                android:layout_marginBottom="-5dip"
+                android:textColor="#4d4d4d" />
+
+            <Button
+                android:id="@+id/findSupportBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="0dp"
+                android:layout_marginLeft="-0dip"
+                android:layout_marginRight="-5dip"
+                android:layout_marginTop="-5dip"
+                android:layout_marginBottom="-5dip"
+                android:text="FIND SUPPORT"
+                android:textColor="#FAFAFA" />
+        </LinearLayout>
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/lstSupporters" />
+            android:layout_height="376dp"
+            android:id="@+id/lstSupporters"
+            android:layout_gravity="center" />
     </FrameLayout>
 
     <include layout="@layout/toolbar"/>

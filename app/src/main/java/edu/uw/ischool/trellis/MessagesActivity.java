@@ -65,7 +65,7 @@ public class MessagesActivity extends FragmentActivity {
         app = (MainApp) getApplication();
         SendBird.init(this, "9D5849EF-E3E4-43F9-843A-1DB0CA03A4BB");
         overridePendingTransition(R.anim.sendbird_slide_in_from_bottom, R.anim.sendbird_slide_out_to_top);
-        setContentView(R.layout.activity_sendbird_user_list);
+        setContentView(R.layout.activity_messages);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         app.changeStatusBarColor(this);

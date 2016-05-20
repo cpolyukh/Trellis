@@ -10,13 +10,20 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 public class EditProfileActivity extends AppCompatActivity {
+    MainApp app;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+        overridePendingTransition(R.anim.sendbird_slide_in_from_bottom, R.anim.sendbird_slide_out_to_top);
+
+        app = (MainApp) getApplication();
+        app.changeStatusBarColor(this);
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -33,13 +40,13 @@ public class EditProfileActivity extends AppCompatActivity {
         /********************************************************/
         /********************** TOOLBAR SETUP *******************/
         /********************************************************/
-        ImageButton supportIcon = (ImageButton) findViewById(R.id.supportIcon);
-        ImageButton messageIcon = (ImageButton) findViewById(R.id.messageIcon);
-        ImageButton conversationIcon = (ImageButton) findViewById(R.id.conversationIcon);
-        ImageButton readMoreIcon = (ImageButton) findViewById(R.id.readMoreIcon);
-        ImageButton settingsIcon = (ImageButton) findViewById(R.id.settingsIcon);
+        LinearLayout friendsIcon = (LinearLayout) findViewById(R.id.friendsLayoutIcon);
+        LinearLayout messagesIcon = (LinearLayout) findViewById(R.id.messagesLayoutIcon);
+        LinearLayout conversationIcon = (LinearLayout) findViewById(R.id.conversationStartersLayoutIcon);
+        LinearLayout learnMoreIcon = (LinearLayout) findViewById(R.id.learnMoreLayoutIcon);
+        LinearLayout profileIcon = (LinearLayout) findViewById(R.id.profileLayoutIcon);
 
-        supportIcon.setOnClickListener(new View.OnClickListener() {
+        friendsIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(EditProfileActivity.this, SupportActivity.class);
@@ -47,7 +54,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-        messageIcon.setOnClickListener(new View.OnClickListener() {
+        messagesIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(EditProfileActivity.this, MessagesActivity.class);
@@ -63,7 +70,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-        readMoreIcon.setOnClickListener(new View.OnClickListener() {
+        learnMoreIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(EditProfileActivity.this, LearnMoreActivity.class);
@@ -71,7 +78,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-        settingsIcon.setOnClickListener(new View.OnClickListener() {
+        profileIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(EditProfileActivity.this, EditProfileActivity.class);

@@ -132,7 +132,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@drawable/sendbird_bg_chat_bubble_purple"
+                android:background="@drawable/please_work"
                 >
                 <TextView
                     android:layout_gravity="right"
