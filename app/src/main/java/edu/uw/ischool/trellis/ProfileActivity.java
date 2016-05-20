@@ -23,12 +23,17 @@ public class ProfileActivity extends AppCompatActivity {
 
     Button messageBtn;
     Button favoriteBtn;
+    MainApp app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        overridePendingTransition(R.anim.sendbird_slide_in_from_bottom, R.anim.sendbird_slide_out_to_top);
 
+        app = (MainApp) getApplication();
+
+        app.changeStatusBarColor(this);
         Intent intent = getIntent();
         String id = intent.getStringExtra("id");
         String firstName = intent.getStringExtra("firstName");

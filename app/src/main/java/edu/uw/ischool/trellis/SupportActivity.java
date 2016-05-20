@@ -28,6 +28,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -60,6 +61,7 @@ public class SupportActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_support);
+        overridePendingTransition(R.anim.sendbird_slide_in_from_bottom, R.anim.sendbird_slide_out_to_top);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -89,37 +91,37 @@ public class SupportActivity extends AppCompatActivity {
         UserAdapter adapter = new UserAdapter(getApplicationContext(), app.getCurrentUser());
         list.setAdapter(adapter);
 
+        final Button mySupportBtn = (Button) findViewById(R.id.mySupportBtn);
+        final Button findSupportBtn = (Button) findViewById(R.id.findSupportBtn);
+        final ListView lstSupporters = (ListView) findViewById(R.id.lstSupporters);
 
 
-//        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent next = new Intent(SupportActivity.this, ProfileActivity.class);
-//                next.putExtra("id", supporterArray[position].getId());
-//                next.putExtra("firstName", supporterArray[position].getFirstName());
-//                next.putExtra("lastName", supporterArray[position].getLastName());
-//
-//                //TODO: send extras necessary to make sure the profile clicked matches the profile displayed
-//                //on the next page
-//                startActivity(next);
-//            }
-//        });
+        mySupportBtn.setBackgroundColor(getResources().getColor(R.color.mini_header));
+        findSupportBtn.setBackgroundColor(getResources().getColor(R.color.header));
 
 
-
-
-
-
-/*
-        TextView firstBox = (TextView) findViewById(R.id.textView8);
-
-        firstBox.setOnClickListener(new View.OnClickListener() {
+        mySupportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent next = new Intent(SupportActivity.this, ProfileActivity.class);
-                startActivity(next);
+                mySupportBtn.setBackgroundColor(getResources().getColor(R.color.header));
+                findSupportBtn.setBackgroundColor(getResources().getColor(R.color.mini_header));
+                findSupportBtn.setTextColor(getResources().getColor(R.color.text_dark));
+                mySupportBtn.setTextColor(getResources().getColor(R.color.text_light));
+                lstSupporters.setVisibility(View.INVISIBLE);
             }
-        });*/
+        });
+
+
+        findSupportBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mySupportBtn.setBackgroundColor(getResources().getColor(R.color.mini_header));
+                findSupportBtn.setBackgroundColor(getResources().getColor(R.color.header));
+                mySupportBtn.setTextColor(getResources().getColor(R.color.text_dark));
+                findSupportBtn.setTextColor(getResources().getColor(R.color.text_light));
+                lstSupporters.setVisibility(View.VISIBLE);
+            }
+        });
 
         /********************************************************/
         /********************** NEW TOOLBAR SETUP *******************/
@@ -241,10 +243,15 @@ public class SupportActivity extends AppCompatActivity {
 
 
             TextView nameTextView = (TextView) rowView.findViewById(R.id.txt_name);
+            TextView supportingView = (TextView) rowView.findViewById(R.id.supportingView);
+            TextView quoteView = (TextView) rowView.findViewById(R.id.quoteView);
             ImageView imgThumb = (ImageView) rowView.findViewById(R.id.img_thumbnail);
 
             Typeface myTypeface = Typeface.createFromAsset(getAssets(), "Futura.ttc");
+            Typeface italic = Typeface.createFromAsset(getAssets(), "Futura_Italic.ttf");
             nameTextView.setTypeface(myTypeface);
+            supportingView.setTypeface(myTypeface);
+            quoteView.setTypeface(italic);
 
             nameTextView.setText(item.getName());
             displayUrlImage(imgThumb, item.getImageUrl());

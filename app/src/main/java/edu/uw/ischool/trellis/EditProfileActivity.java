@@ -18,12 +18,10 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import org.w3c.dom.Text;
-
 import java.util.List;
-
 import edu.uw.ischool.trellis.UI.EditProfileUpdateActivity;
+
 
 public class EditProfileActivity extends AppCompatActivity {
     ListView supportSkillList;
@@ -31,11 +29,14 @@ public class EditProfileActivity extends AppCompatActivity {
     MainApp mainApp;
     User currentUser;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+        overridePendingTransition(R.anim.sendbird_slide_in_from_bottom, R.anim.sendbird_slide_out_to_top);
+
+        app = (MainApp) getApplication();
+        app.changeStatusBarColor(this);
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 

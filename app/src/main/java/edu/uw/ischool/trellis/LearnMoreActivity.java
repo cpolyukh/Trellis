@@ -23,6 +23,7 @@ public class LearnMoreActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_learn_more);
+        overridePendingTransition(R.anim.sendbird_slide_in_from_bottom, R.anim.sendbird_slide_out_to_top);
 
         Typeface myTypeface = Typeface.createFromAsset(getAssets(), "Futura.ttc");
         TextView[] textViews = {(TextView) findViewById(R.id.textView1), (TextView) findViewById(R.id.textView2),
@@ -35,7 +36,7 @@ public class LearnMoreActivity extends AppCompatActivity {
 
 
         app = (MainApp) getApplication();
-
+        app.changeStatusBarColor(this);
 
         /********************************************************/
         /********************** NEW TOOLBAR SETUP *******************/

@@ -26,11 +26,13 @@ public class SupportSelectionActivity extends AppCompatActivity implements Seria
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_support_selection);
+        overridePendingTransition(R.anim.sendbird_slide_in_from_bottom, R.anim.sendbird_slide_out_to_top);
 
         seekSupportBtn = (Button) findViewById(R.id.seekSupportBtn);
         giveSupportBtn = (Button) findViewById(R.id.giveSupportBtn);
 
         app = (MainApp) getApplication();
+        app.changeStatusBarColor(this);
 
 
         seekSupportBtn.setOnClickListener(new View.OnClickListener() {
