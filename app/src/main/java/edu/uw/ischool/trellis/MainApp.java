@@ -1,7 +1,11 @@
 package edu.uw.ischool.trellis;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.Application;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -51,6 +55,21 @@ public class MainApp extends Application {
         } catch (Exception er) {
             Log.e("Access Assets", "Error Message: " + er.toString());
         }
+    }
+
+    @TargetApi(21)
+    public void changeStatusBarColor(Activity activity) {
+        Window window = activity.getWindow();
+
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+        // finally change the color
+        window.setStatusBarColor(activity.getResources().getColor(R.color.status_bar));
+
     }
 
     // reads given InputStream of JSON file and returns it in string format

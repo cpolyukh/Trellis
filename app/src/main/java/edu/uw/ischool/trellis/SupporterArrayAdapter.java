@@ -50,14 +50,14 @@ public class SupporterArrayAdapter extends ArrayAdapter<Supporter> {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.supporter_results_row, parent, false);
-        TextView nameTextView = (TextView) rowView.findViewById(R.id.txtSupporterName);
-        TextView countTextView = (TextView) rowView.findViewById(R.id.txtSupportCount);
-        TextView quoteTextView = (TextView) rowView.findViewById(R.id.txtQuote);
-        iv = (ImageView) rowView.findViewById(R.id.supportIcon);
-
-        nameTextView.setText(values[position].getName());
-        countTextView.setText("" + values[position].getSupporteeCount());
-        quoteTextView.setText(values[position].getQuote());
+//        TextView nameTextView = (TextView) rowView.findViewById(R.id.txtSupporterName);
+//        TextView countTextView = (TextView) rowView.findViewById(R.id.txtSupportCount);
+//        TextView quoteTextView = (TextView) rowView.findViewById(R.id.txtQuote);
+//        iv = (ImageView) rowView.findViewById(R.id.supportIcon);
+//
+//        nameTextView.setText(values[position].getName());
+//        countTextView.setText("" + values[position].getSupporteeCount());
+//        quoteTextView.setText(values[position].getQuote());
 
         // Set user image
         String imgURL = "https://graph.facebook.com/" + values[position].getId() + "/picture?type=large";

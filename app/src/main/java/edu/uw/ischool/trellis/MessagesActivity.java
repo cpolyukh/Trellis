@@ -67,6 +67,8 @@ public class MessagesActivity extends FragmentActivity {
         setContentView(R.layout.activity_sendbird_user_list);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+        app.changeStatusBarColor(this);
+
         String gcmRegToken = PreferenceManager.getDefaultSharedPreferences(MessagesActivity.this).getString("SendBirdGCMToken", "");
         SendBird.login(SendBird.LoginOption.build("UUID").setUserName(app.getCurrentUser().getName()).setGCMRegToken(gcmRegToken));
 
@@ -139,9 +141,6 @@ public class MessagesActivity extends FragmentActivity {
 
 
     }
-
-
-
 
     private static void displayUrlImage(ImageView imageView, String url) {
         UrlDownloadAsyncTask.display(url, imageView);

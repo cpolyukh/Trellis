@@ -1,5 +1,6 @@
 package edu.uw.ischool.trellis;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -34,6 +35,7 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -101,18 +103,22 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * Created by iguest on 5/14/16.
  */
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends FragmentActivity {
     private static final int REQUEST_MEMBER_LIST = 100;
     private static final int MY_PERMISSION_REQUEST_STORAGE = 100;
 
-    private SendBirdChatFragment mSendBirdMessagingFragment;
-    private SendBirdMessagingAdapter mSendBirdMessagingAdapter;
+    private SendBirdChatFragment mSendBirdChatFragment;
+    private SendBirdChatAdapter mSendBirdChatAdapter;
 
     private TextView mTxtChannelUrl;
     private View mTopBarContainer;
     private CountDownTimer mTimer;
     private MessagingChannel mMessagingChannel;
     private Bundle mSendBirdInfo;
+    private String mChannelUrl;
+    private boolean mDoNotDisconnect;
+
+
 
     private boolean isUploading;
     private boolean isForeground;
@@ -124,6 +130,26 @@ public class ChatActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.sendbird_slide_in_from_bottom, R.anim.sendbird_slide_out_to_top);
         setContentView(R.layout.activity_sendbird_chat);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        SendBird.queryMessageList(mChannelUrl).prev(Long.MAX_VALUE, 50, new MessageListQuery.MessageListQueryResult() {
+            @Override
+            public void onResult(List<MessageModel> messageModels) {
+                for (MessageModel model : messageModels) {
+                    mSendBirdChatAdapter.addMessageModel(model);
+                }
+
+
+                mSendBirdChatAdapter.notifyDataSetChanged();
+                mSendBirdChatFragment.mListView.setSelection(mSendBirdChatAdapter.getCount());
+                SendBird.join(mChannelUrl);
+                SendBird.connect(mSendBirdChatAdapter.getMaxMessageTimestamp());
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
 
         Intent intent = getIntent();
 
@@ -137,18 +163,6 @@ public class ChatActivity extends AppCompatActivity {
         channel.setText(userName);
 
     }
-
-    private void initFragment() {
-        mSendBirdMessagingFragment = new SendBirdChatFragment();
-
-        mSendBirdMessagingAdapter = new SendBirdMessagingAdapter(this);
-        mSendBirdMessagingFragment.setSendBirdMessagingAdapter(mSendBirdMessagingAdapter);
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, mSendBirdMessagingFragment)
-                .commit();
-    }
-
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -168,69 +182,11 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
-        isForeground = true;
-        SendBird.markAsRead();
-
-        if (mTimer != null) {
-            mTimer.cancel();
-        }
-        mTimer = new CountDownTimer(60 * 60 * 24 * 7 * 1000L, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                if (mSendBirdMessagingAdapter != null) {
-                    if (mSendBirdMessagingAdapter.checkTypeStatus()) {
-                        mSendBirdMessagingAdapter.notifyDataSetChanged();
-                    }
-                }
-            }
-
-            @Override
-            public void onFinish() {
-            }
-        };
-        mTimer.start();
-
-
-        if(isUploading) {
-            isUploading = false;
-        } else {
-            mSendBirdMessagingAdapter.clear();
-            mSendBirdMessagingAdapter.notifyDataSetChanged();
-
-            if (mSendBirdInfo.getBoolean("start")) {
-                String[] targetUserIds = mSendBirdInfo.getStringArray("targetUserIds");
-                SendBird.startMessaging(Arrays.asList(targetUserIds));
-            } else if (mSendBirdInfo.getBoolean("join")) {
-                String channelUrl = mSendBirdInfo.getString("channelUrl");
-                SendBird.joinMessaging(channelUrl);
-            }
-        }
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        isForeground = false;
-
-        if (mTimer != null) {
-            mTimer.cancel();
-        }
-
-        if(!isUploading) {
-            SendBird.disconnect();
-        }
-    }
-
-    @Override
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.sendbird_slide_in_from_top, R.anim.sendbird_slide_out_to_bottom);
     }
+
 
 
 
@@ -283,32 +239,18 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void initSendBird(Bundle extras) {
-        mSendBirdInfo = extras;
-
         String appKey = "9D5849EF-E3E4-43F9-843A-1DB0CA03A4BB";
         String uuid = "uuid";
         String nickname = "nickname";
         String gcmRegToken = PreferenceManager.getDefaultSharedPreferences(ChatActivity.this).getString("SendBirdGCMToken", "");
 
+        mChannelUrl = "channelURL";
         SendBird.init(this, appKey);
         SendBird.login(SendBird.LoginOption.build(uuid).setUserName(nickname).setGCMRegToken(gcmRegToken));
-        SendBird.registerNotificationHandler(new SendBirdNotificationHandler() {
-            @Override
-            public void onMessagingChannelUpdated(MessagingChannel messagingChannel) {
-                if (mMessagingChannel != null && mMessagingChannel.getId() == messagingChannel.getId()) {
-                    updateMessagingChannel(messagingChannel);
-                }
-            }
-
-            @Override
-            public void onMentionUpdated(Mention mention) {
-
-            }
-        });
-
         SendBird.setEventHandler(new SendBirdEventHandler() {
             @Override
             public void onConnect(Channel channel) {
+                mTxtChannelUrl.setText("#" + channel.getUrlWithoutAppPrefix());
             }
 
             @Override
@@ -322,10 +264,7 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onMessageReceived(Message message) {
-                if (isForeground) {
-                    SendBird.markAsRead();
-                }
-                mSendBirdMessagingAdapter.addMessageModel(message);
+                mSendBirdChatAdapter.addMessageModel(message);
             }
 
             @Override
@@ -335,29 +274,17 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onSystemMessageReceived(SystemMessage systemMessage) {
-                switch (systemMessage.getCategory()) {
-                    case SystemMessage.CATEGORY_TOO_MANY_MESSAGES:
-                        systemMessage.setMessage("Too many messages. Please try later.");
-                        break;
-                    case SystemMessage.CATEGORY_MESSAGING_USER_BLOCKED:
-                        systemMessage.setMessage("Blocked.");
-                        break;
-                    case SystemMessage.CATEGORY_MESSAGING_USER_DEACTIVATED:
-                        systemMessage.setMessage("Deactivated.");
-                        break;
-                }
-
-                mSendBirdMessagingAdapter.addMessageModel(systemMessage);
+                mSendBirdChatAdapter.addMessageModel(systemMessage);
             }
 
             @Override
             public void onBroadcastMessageReceived(BroadcastMessage broadcastMessage) {
-                mSendBirdMessagingAdapter.addMessageModel(broadcastMessage);
+                mSendBirdChatAdapter.addMessageModel(broadcastMessage);
             }
 
             @Override
             public void onFileReceived(FileLink fileLink) {
-                mSendBirdMessagingAdapter.addMessageModel(fileLink);
+                mSendBirdChatAdapter.addMessageModel(fileLink);
             }
 
             @Override
@@ -366,62 +293,36 @@ public class ChatActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onReadReceived(ReadStatus readStatus) {
-                mSendBirdMessagingAdapter.setReadStatus(readStatus.getUserId(), readStatus.getTimestamp());
-            }
-
-            @Override
-            public void onTypeStartReceived(TypeStatus typeStatus) {
-                mSendBirdMessagingAdapter.setTypeStatus(typeStatus.getUserId(), System.currentTimeMillis());
-            }
-
-            @Override
-            public void onTypeEndReceived(TypeStatus typeStatus) {
-                mSendBirdMessagingAdapter.setTypeStatus(typeStatus.getUserId(), 0);
-            }
-
-            @Override
             public void onAllDataReceived(SendBird.SendBirdDataType type, int count) {
-                mSendBirdMessagingAdapter.notifyDataSetChanged();
-                mSendBirdMessagingFragment.mListView.setSelection(mSendBirdMessagingAdapter.getCount() - 1);
+                mSendBirdChatAdapter.notifyDataSetChanged();
+                mSendBirdChatFragment.mListView.setSelection(mSendBirdChatAdapter.getCount());
             }
 
             @Override
-            public void onMessageDelivery(boolean sent, String message, String data, String tempId) {
+            public void onMessageDelivery(boolean sent, String message, String data, String id) {
                 if (!sent) {
-                    mSendBirdMessagingFragment.mEtxtMessage.setText(message);
+                    mSendBirdChatFragment.mEtxtMessage.setText(message);
                 }
             }
 
             @Override
-            public void onMessagingStarted(final MessagingChannel messagingChannel) {
-                mSendBirdMessagingAdapter.clear();
-                updateMessagingChannel(messagingChannel);
+            public void onReadReceived(ReadStatus readStatus) {
+            }
 
-                SendBird.queryMessageList(messagingChannel.getUrl()).load(Long.MAX_VALUE, 30, 10, new MessageListQuery.MessageListQueryResult() {
-                    @Override
-                    public void onResult(List<MessageModel> messageModels) {
-                        for (MessageModel model : messageModels) {
-                            mSendBirdMessagingAdapter.addMessageModel(model);
-                        }
-                        mSendBirdMessagingAdapter.notifyDataSetChanged();
-                        mSendBirdMessagingFragment.mListView.setSelection(30);
+            @Override
+            public void onTypeStartReceived(TypeStatus typeStatus) {
+            }
 
-                        SendBird.markAsRead(messagingChannel.getUrl());
-                        SendBird.join(messagingChannel.getUrl());
-                        SendBird.connect(mSendBirdMessagingAdapter.getMaxMessageTimestamp());
-                    }
+            @Override
+            public void onTypeEndReceived(TypeStatus typeStatus) {
+            }
 
-                    @Override
-                    public void onError(Exception e) {
-
-                    }
-                });
+            @Override
+            public void onMessagingStarted(MessagingChannel messagingChannel) {
             }
 
             @Override
             public void onMessagingUpdated(MessagingChannel messagingChannel) {
-                updateMessagingChannel(messagingChannel);
             }
 
             @Override
@@ -443,41 +344,49 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void updateMessagingChannel(MessagingChannel messagingChannel) {
-        mMessagingChannel = messagingChannel;
-        mTxtChannelUrl.setText(getDisplayMemberNames(messagingChannel.getMembers()));
 
-        Hashtable<String, Long> readStatus = new Hashtable<String, Long>();
-        for (MessagingChannel.Member member : messagingChannel.getMembers()) {
-            Long currentStatus = mSendBirdMessagingAdapter.mReadStatus.get(member.getId());
-            if (currentStatus == null) {
-                currentStatus = 0L;
+    private void initFragment() {
+        mSendBirdChatFragment = new SendBirdChatFragment();
+
+        mSendBirdChatAdapter = new SendBirdChatAdapter(this);
+        mSendBirdChatFragment.setSendBirdChatAdapter(mSendBirdChatAdapter);
+
+        mSendBirdChatFragment.setSendBirdChatHandler(new SendBirdChatFragment.SendBirdChatHandler() {
+
+            @Override
+            public void onChannelListClicked() {
+//                Intent intent = new Intent(ChatActivity.this, SendBirdChannelListActivity.class);
+//                intent.putExtras(getIntent().getExtras());
+//                startActivityForResult(intent, REQUEST_CHANNEL_LIST);
             }
-            readStatus.put(member.getId(), Math.max(currentStatus, messagingChannel.getLastReadMillis(member.getId())));
-        }
-        mSendBirdMessagingAdapter.resetReadStatus(readStatus);
+        });
 
-        mSendBirdMessagingAdapter.setMembers(messagingChannel.getMembers());
-        mSendBirdMessagingAdapter.notifyDataSetChanged();
-    }
-
-    private void initUIComponents() {
-
-        mTopBarContainer = findViewById(R.id.top_bar_container);
-        mTxtChannelUrl = (TextView) findViewById(R.id.txt_channel_url);
-
-        resizeMenubar();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, mSendBirdChatFragment)
+                .commit();
     }
 
     public static class SendBirdChatFragment extends Fragment {
         private static final int REQUEST_PICK_IMAGE = 100;
 
         private ListView mListView;
-        private SendBirdMessagingAdapter mAdapter;
+        private SendBirdChatAdapter mAdapter;
         private EditText mEtxtMessage;
         private Button mBtnSend;
+        private LayoutInflater inflater;
+        private ViewGroup container;
+        private ImageButton mBtnChannel;
         private ImageButton mBtnUpload;
         private ProgressBar mProgressBtnUpload;
+        private SendBirdChatHandler mHandler;
+
+        public static interface SendBirdChatHandler {
+            public void onChannelListClicked();
+        }
+
+        public void setSendBirdChatHandler(SendBirdChatHandler handler) {
+            mHandler = handler;
+        }
 
         public SendBirdChatFragment() {
         }
@@ -485,21 +394,24 @@ public class ChatActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.sendbird_fragment_messaging, container, false);
+            this.inflater = inflater;
+            this.container = container;
+            View rootView = inflater.inflate(R.layout.sendbird_fragment_chat, container, false);
             initUIComponents(rootView);
             return rootView;
         }
 
 
         private void initUIComponents(View rootView) {
-            mListView = (ListView) rootView.findViewById(R.id.list);
+            mListView = (ListView)rootView.findViewById(R.id.list);
             turnOffListViewDecoration(mListView);
             mListView.setAdapter(mAdapter);
 
-            mBtnSend = (Button) rootView.findViewById(R.id.btn_send);
-            mBtnUpload = (ImageButton) rootView.findViewById(R.id.btn_upload);
-            mProgressBtnUpload = (ProgressBar) rootView.findViewById(R.id.progress_btn_upload);
-            mEtxtMessage = (EditText) rootView.findViewById(R.id.etxt_message);
+            View message = inflater.inflate(R.layout.sendbird_view_messaging_message, container, false);
+
+
+            mBtnSend = (Button)rootView.findViewById(R.id.btn_send);
+            mEtxtMessage = (EditText)rootView.findViewById(R.id.etxt_message);
 
             mBtnSend.setEnabled(false);
             mBtnSend.setOnClickListener(new View.OnClickListener() {
@@ -510,16 +422,33 @@ public class ChatActivity extends AppCompatActivity {
             });
 
 
+
+
+
+
+//
+//            mBtnUpload.setOnClickListener(new View.OnClickListener() {
+//
+//                @Override
+//                public void onClick(View v) {
+//                    if(Helper.requestReadWriteStoragePermissions(getActivity())) {
+//                        Intent intent = new Intent();
+//                        intent.setType("image/*");
+//                        intent.setAction(Intent.ACTION_GET_CONTENT);
+//                        startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_PICK_IMAGE);
+//                    }
+//                }
+//            });
+
             mEtxtMessage.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if(keyCode == KeyEvent.KEYCODE_ENTER) {
+                        if(event.getAction() == KeyEvent.ACTION_DOWN) {
                             send();
                         }
                         return true; // Do not hide keyboard.
                     }
-
                     return false;
                 }
             });
@@ -538,12 +467,6 @@ public class ChatActivity extends AppCompatActivity {
                 @Override
                 public void afterTextChanged(Editable s) {
                     mBtnSend.setEnabled(s.length() > 0);
-
-                    if (s.length() > 0) {
-                        SendBird.typeStart();
-                    } else {
-                        SendBird.typeEnd();
-                    }
                 }
             });
             mListView.setOnTouchListener(new View.OnTouchListener() {
@@ -556,44 +479,21 @@ public class ChatActivity extends AppCompatActivity {
             mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(AbsListView view, int scrollState) {
-                    if (scrollState == SCROLL_STATE_IDLE) {
-                        if (view.getFirstVisiblePosition() == 0 && view.getChildCount() > 0 && view.getChildAt(0).getTop() == 0) {
+                    if(scrollState == SCROLL_STATE_IDLE) {
+                        if(view.getFirstVisiblePosition() == 0 && view.getChildCount() > 0 && view.getChildAt(0).getTop() == 0) {
                             SendBird.queryMessageList(SendBird.getChannelUrl()).prev(mAdapter.getMinMessageTimestamp(), 30, new MessageListQuery.MessageListQueryResult() {
                                 @Override
                                 public void onResult(List<MessageModel> messageModels) {
-                                    if (messageModels.size() <= 0) {
-                                        return;
-                                    }
-
-                                    for (MessageModel model : messageModels) {
+                                    for(MessageModel model : messageModels) {
                                         mAdapter.addMessageModel(model);
                                     }
+
                                     mAdapter.notifyDataSetChanged();
                                     mListView.setSelection(messageModels.size());
                                 }
 
                                 @Override
                                 public void onError(Exception e) {
-
-                                }
-                            });
-                        } else if (view.getLastVisiblePosition() == mListView.getAdapter().getCount() - 1 && view.getChildCount() > 0) {
-                            SendBird.queryMessageList(SendBird.getChannelUrl()).next(mAdapter.getMaxMessageTimestamp(), 30, new MessageListQuery.MessageListQueryResult() {
-                                @Override
-                                public void onResult(List<MessageModel> messageModels) {
-                                    if (messageModels.size() <= 0) {
-                                        return;
-                                    }
-
-                                    for (MessageModel model : messageModels) {
-                                        mAdapter.addMessageModel(model);
-                                    }
-                                    mAdapter.notifyDataSetChanged();
-                                }
-
-                                @Override
-                                public void onError(Exception e) {
-
                                 }
                             });
                         }
@@ -607,7 +507,7 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         private void showUploadProgress(boolean tf) {
-            if (tf) {
+            if(tf) {
                 mBtnUpload.setEnabled(false);
                 mBtnUpload.setVisibility(View.INVISIBLE);
                 mProgressBtnUpload.setVisibility(View.VISIBLE);
@@ -631,32 +531,32 @@ public class ChatActivity extends AppCompatActivity {
 
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
-            if (resultCode == Activity.RESULT_OK) {
-                if (requestCode == REQUEST_PICK_IMAGE && data != null && data.getData() != null) {
+            if(resultCode == Activity.RESULT_OK) {
+                if(requestCode == REQUEST_PICK_IMAGE && data != null && data.getData() != null) {
                     upload(data.getData());
                 }
             }
         }
 
-
-
         private void send() {
             SendBird.send(mEtxtMessage.getText().toString());
             mEtxtMessage.setText("");
 
-            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 Helper.hideKeyboard(getActivity());
             }
+
+
         }
 
         private void upload(Uri uri) {
             try {
                 Hashtable<String, Object> info = Helper.getFileInfo(getActivity(), uri);
-                final String path = (String) info.get("path");
-                final String mime = (String) info.get("mime");
-                final int size = (Integer) info.get("size");
+                final String path = (String)info.get("path");
+                final String mime = (String)info.get("mime");
+                final int size = (Integer)info.get("size");
 
-                if (path == null) {
+                if(path == null) {
                     Toast.makeText(getActivity(), "Uploading file must be located in local storage.", Toast.LENGTH_LONG).show();
                 } else {
                     showUploadProgress(true);
@@ -682,107 +582,31 @@ public class ChatActivity extends AppCompatActivity {
         }
 
 
-        public void setSendBirdMessagingAdapter(SendBirdMessagingAdapter adapter) {
+        public void setSendBirdChatAdapter(SendBirdChatAdapter adapter) {
             mAdapter = adapter;
-            if (mListView != null) {
+            if(mListView != null) {
                 mListView.setAdapter(adapter);
             }
         }
     }
 
-    public class SendBirdMessagingAdapter extends BaseAdapter {
+    public class SendBirdChatAdapter extends BaseAdapter {
         private static final int TYPE_UNSUPPORTED = 0;
         private static final int TYPE_MESSAGE = 1;
         private static final int TYPE_SYSTEM_MESSAGE = 2;
         private static final int TYPE_FILELINK = 3;
         private static final int TYPE_BROADCAST_MESSAGE = 4;
-        private static final int TYPE_TYPING_INDICATOR = 5;
 
         private final Context mContext;
         private final LayoutInflater mInflater;
         private final ArrayList<Object> mItemList;
-
-        private Hashtable<String, Long> mReadStatus;
-        private Hashtable<String, Long> mTypeStatus;
-        private List<MessagingChannel.Member> mMembers;
         private long mMaxMessageTimestamp = Long.MIN_VALUE;
         private long mMinMessageTimestamp = Long.MAX_VALUE;
 
-        public SendBirdMessagingAdapter(Context context) {
+        public SendBirdChatAdapter(Context context) {
             mContext = context;
-            mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mItemList = new ArrayList<Object>();
-            mReadStatus = new Hashtable<String, Long>();
-            mTypeStatus = new Hashtable<String, Long>();
-        }
-
-        @Override
-        public int getCount() {
-            return mItemList.size() + ((mTypeStatus.size() <= 0) ? 0 : 1);
-        }
-
-        @Override
-        public Object getItem(int position) {
-            if (position >= mItemList.size()) {
-                ArrayList<String> names = new ArrayList<String>();
-                for (MessagingChannel.Member member : mMembers) {
-                    if (mTypeStatus.containsKey(member.getId())) {
-                        names.add(member.getName());
-                    }
-                }
-
-                return names;
-            }
-            return mItemList.get(position);
-        }
-
-        public void delete(Object object) {
-            mItemList.remove(object);
-        }
-
-        public void clear() {
-            mMaxMessageTimestamp = Long.MIN_VALUE;
-            mMinMessageTimestamp = Long.MAX_VALUE;
-
-            mReadStatus.clear();
-            mTypeStatus.clear();
-            mItemList.clear();
-        }
-
-        public void resetReadStatus(Hashtable<String, Long> readStatus) {
-            mReadStatus = readStatus;
-        }
-
-        public void setReadStatus(String userId, long timestamp) {
-            if (mReadStatus.get(userId) == null || mReadStatus.get(userId) < timestamp) {
-                mReadStatus.put(userId, timestamp);
-            }
-        }
-
-        public void setTypeStatus(String userId, long timestamp) {
-            if (userId.equals(SendBird.getUserId())) {
-                return;
-            }
-
-            if (timestamp <= 0) {
-                mTypeStatus.remove(userId);
-            } else {
-                mTypeStatus.put(userId, timestamp);
-            }
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        public void addMessageModel(MessageModel messageModel) {
-            if (messageModel.isPast()) {
-                mItemList.add(0, messageModel);
-            } else {
-                mItemList.add(messageModel);
-            }
-            updateMessageTimestamp(messageModel);
         }
 
         private void updateMessageTimestamp(MessageModel model) {
@@ -798,25 +622,49 @@ public class ChatActivity extends AppCompatActivity {
             return mMinMessageTimestamp == Long.MAX_VALUE ? Long.MIN_VALUE : mMinMessageTimestamp;
         }
 
-        public void setMembers(List<MessagingChannel.Member> members) {
-            mMembers = members;
+        public void delete(Object message) {
+            mItemList.remove(message);
         }
 
+        @Override
+        public int getCount() {
+            return mItemList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mItemList.get(position);
+        }
+
+        public void clear() {
+            mMaxMessageTimestamp = Long.MIN_VALUE;
+            mMinMessageTimestamp = Long.MAX_VALUE;
+            mItemList.clear();
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+        public void addMessageModel(MessageModel model) {
+            if(model.isPast()) {
+                mItemList.add(0, model);
+            } else {
+                mItemList.add(model);
+            }
+            updateMessageTimestamp(model);
+        }
 
         @Override
         public int getItemViewType(int position) {
-            if (position >= mItemList.size()) {
-                return TYPE_TYPING_INDICATOR;
-            }
-
             Object item = mItemList.get(position);
-            if (item instanceof Message) {
+            if(item instanceof Message) {
                 return TYPE_MESSAGE;
-            } else if (item instanceof FileLink) {
+            } else if(item instanceof FileLink) {
                 return TYPE_FILELINK;
-            } else if (item instanceof SystemMessage) {
+            } else if(item instanceof SystemMessage) {
                 return TYPE_SYSTEM_MESSAGE;
-            } else if (item instanceof BroadcastMessage) {
+            } else if(item instanceof BroadcastMessage) {
                 return TYPE_BROADCAST_MESSAGE;
             }
 
@@ -825,7 +673,7 @@ public class ChatActivity extends AppCompatActivity {
 
         @Override
         public int getViewTypeCount() {
-            return 6;
+            return 5;
         }
 
         @Override
@@ -833,46 +681,22 @@ public class ChatActivity extends AppCompatActivity {
             ViewHolder viewHolder;
             final Object item = getItem(position);
 
-            if (convertView == null || ((ViewHolder) convertView.getTag()).getViewType() != getItemViewType(position)) {
+            if(convertView == null || ((ViewHolder)convertView.getTag()).getViewType() != getItemViewType(position)) {
                 viewHolder = new ViewHolder();
                 viewHolder.setViewType(getItemViewType(position));
 
-                switch (getItemViewType(position)) {
+                switch(getItemViewType(position)) {
                     case TYPE_UNSUPPORTED:
                         convertView = new View(mInflater.getContext());
                         convertView.setTag(viewHolder);
                         break;
                     case TYPE_MESSAGE: {
                         TextView tv;
-                        ImageView iv;
-                        View v;
 
-                        convertView = mInflater.inflate(R.layout.sendbird_view_messaging_message, parent, false);
-
-                        v = convertView.findViewById(R.id.left_container);
-                        viewHolder.setView("left_container", v);
-                        iv = (ImageView) convertView.findViewById(R.id.img_left_thumbnail);
-                        viewHolder.setView("left_thumbnail", iv);
-                        tv = (TextView) convertView.findViewById(R.id.txt_left);
-                        viewHolder.setView("left_message", tv);
-                        tv = (TextView) convertView.findViewById(R.id.txt_left_name);
-                        viewHolder.setView("left_name", tv);
-                        tv = (TextView) convertView.findViewById(R.id.txt_left_time);
-                        viewHolder.setView("left_time", tv);
-
-                        v = convertView.findViewById(R.id.right_container);
-                        viewHolder.setView("right_container", v);
-                        iv = (ImageView) convertView.findViewById(R.id.img_right_thumbnail);
-                        viewHolder.setView("right_thumbnail", iv);
-                        tv = (TextView) convertView.findViewById(R.id.txt_right);
-                        viewHolder.setView("right_message", tv);
-                        tv = (TextView) convertView.findViewById(R.id.txt_right_name);
-                        viewHolder.setView("right_name", tv);
-                        tv = (TextView) convertView.findViewById(R.id.txt_right_time);
-                        viewHolder.setView("right_time", tv);
-                        tv = (TextView) convertView.findViewById(R.id.txt_right_status);
-                        viewHolder.setView("right_status", tv);
-
+                        convertView = mInflater.inflate(R.layout.sendbird_view_message, parent, false);
+                        tv = (TextView) convertView.findViewById(R.id.txt_message);
+                        viewHolder.setView("message", tv);
+                        viewHolder.setView("img_op_icon", (ImageView)convertView.findViewById(R.id.img_op_icon));
                         convertView.setTag(viewHolder);
                         break;
                     }
@@ -890,68 +714,25 @@ public class ChatActivity extends AppCompatActivity {
                     }
                     case TYPE_FILELINK: {
                         TextView tv;
-                        ImageView iv;
-                        View v;
 
-                        convertView = mInflater.inflate(R.layout.sendbird_view_messaging_filelink, parent, false);
+                        convertView = mInflater.inflate(R.layout.sendbird_view_filelink, parent, false);
+                        tv = (TextView) convertView.findViewById(R.id.txt_sender_name);
+                        viewHolder.setView("txt_sender_name", tv);
+                        viewHolder.setView("img_op_icon", (ImageView)convertView.findViewById(R.id.img_op_icon));
 
-                        v = convertView.findViewById(R.id.left_container);
-                        viewHolder.setView("left_container", v);
-                        iv = (ImageView) convertView.findViewById(R.id.img_left_thumbnail);
-                        viewHolder.setView("left_thumbnail", iv);
-                        iv = (ImageView) convertView.findViewById(R.id.img_left);
-                        viewHolder.setView("left_image", iv);
-                        tv = (TextView) convertView.findViewById(R.id.txt_left_name);
-                        viewHolder.setView("left_name", tv);
-                        tv = (TextView) convertView.findViewById(R.id.txt_left_time);
-                        viewHolder.setView("left_time", tv);
+                        viewHolder.setView("img_file_container", convertView.findViewById(R.id.img_file_container));
 
-                        v = convertView.findViewById(R.id.right_container);
-                        viewHolder.setView("right_container", v);
-                        iv = (ImageView) convertView.findViewById(R.id.img_right_thumbnail);
-                        viewHolder.setView("right_thumbnail", iv);
-                        iv = (ImageView) convertView.findViewById(R.id.img_right);
-                        viewHolder.setView("right_image", iv);
-                        tv = (TextView) convertView.findViewById(R.id.txt_right_name);
-                        viewHolder.setView("right_name", tv);
-                        tv = (TextView) convertView.findViewById(R.id.txt_right_time);
-                        viewHolder.setView("right_time", tv);
-                        tv = (TextView) convertView.findViewById(R.id.txt_right_status);
-                        viewHolder.setView("right_status", tv);
+                        viewHolder.setView("image_container", convertView.findViewById(R.id.image_container));
+                        viewHolder.setView("img_thumbnail", convertView.findViewById(R.id.img_thumbnail));
+                        viewHolder.setView("txt_image_name", convertView.findViewById(R.id.txt_image_name));
+                        viewHolder.setView("txt_image_size", convertView.findViewById(R.id.txt_image_size));
+
+                        viewHolder.setView("file_container", convertView.findViewById(R.id.file_container));
+                        viewHolder.setView("txt_file_name", convertView.findViewById(R.id.txt_file_name));
+                        viewHolder.setView("txt_file_size", convertView.findViewById(R.id.txt_file_size));
 
                         convertView.setTag(viewHolder);
 
-                        convertView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                new AlertDialog.Builder(mContext)
-                                        .setTitle("SendBird")
-                                        .setMessage("Do you want to download this file?")
-                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                try {
-                                                    downloadUrl((FileLink) item, mContext);
-                                                } catch (IOException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        })
-                                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                            }
-                                        })
-                                        .create()
-                                        .show();
-                            }
-                        });
-                        break;
-                    }
-                    case TYPE_TYPING_INDICATOR: {
-                        convertView = mInflater.inflate(R.layout.sendbird_view_typing_indicator, parent, false);
-                        viewHolder.setView("message", convertView.findViewById(R.id.txt_message));
-                        convertView.setTag(viewHolder);
                         break;
                     }
                 }
@@ -959,168 +740,165 @@ public class ChatActivity extends AppCompatActivity {
 
 
             viewHolder = (ViewHolder) convertView.getTag();
-            switch (getItemViewType(position)) {
+            switch(getItemViewType(position)) {
                 case TYPE_UNSUPPORTED:
                     break;
                 case TYPE_MESSAGE:
-                    Message message = (Message) item;
-                    if (message.getSenderId().equals(SendBird.getUserId())) {
-                        viewHolder.getView("left_container", View.class).setVisibility(View.GONE);
-                        viewHolder.getView("right_container", View.class).setVisibility(View.VISIBLE);
-
-                        displayUrlImage(viewHolder.getView("right_thumbnail", ImageView.class), message.getSenderImageUrl(), true);
-                        viewHolder.getView("right_name", TextView.class).setText(message.getSenderName());
-                        viewHolder.getView("right_message", TextView.class).setText(message.getMessage());
-                        viewHolder.getView("right_time", TextView.class).setText(getDisplayDateTime(mContext, message.getTimestamp()));
-
-                        int readCount = 0;
-                        for (String key : mReadStatus.keySet()) {
-                            if (key.equals(message.getSenderId())) {
-                                readCount += 1;
-                                continue;
-                            }
-
-                            if (mReadStatus.get(key) >= message.getTimestamp()) {
-                                readCount += 1;
-                            }
-                        }
-                        if (readCount < mReadStatus.size()) {
-                            if (mReadStatus.size() - readCount > 1) {
-                                viewHolder.getView("right_status", TextView.class).setText("Unread " + (mReadStatus.size() - readCount));
-                            } else {
-                                viewHolder.getView("right_status", TextView.class).setText("Unread");
-                            }
-                        } else {
-                            viewHolder.getView("right_status", TextView.class).setText("");
-                        }
-
-                        viewHolder.getView("right_container").setOnLongClickListener(new View.OnLongClickListener() {
-                            @Override
-                            public boolean onLongClick(View v) {
-                                new AlertDialog.Builder(mContext)
-                                        .setTitle("SendBird")
-                                        .setMessage("Do you want to delete a message?")
-                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                SendBird.deleteMessage(((Message) item).getMessageId(), new DeleteMessageHandler() {
-                                                    @Override
-                                                    public void onError(SendBirdException e) {
-                                                        e.printStackTrace();
-                                                    }
-
-                                                    @Override
-                                                    public void onSuccess(long messageId) {
-                                                        mSendBirdMessagingAdapter.delete(item);
-                                                        mSendBirdMessagingAdapter.notifyDataSetChanged();
-                                                        Toast.makeText(mContext, "Message has been deleted.", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
-                                            }
-                                        })
-                                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                            }
-                                        })
-                                        .create()
-                                        .show();
-
-                                return true;
-                            }
-                        });
+                    Message message = (Message)item;
+                    if(message.isOpMessage()) {
+                        viewHolder.getView("img_op_icon", ImageView.class).setVisibility(View.VISIBLE);
+                        viewHolder.getView("message", TextView.class).setText(Html.fromHtml("&nbsp;&nbsp;&nbsp;<font color='#824096'><b>" + message.getSenderName() + "</b></font>: " + message.getMessage()));
                     } else {
-                        viewHolder.getView("left_container", View.class).setVisibility(View.VISIBLE);
-                        viewHolder.getView("right_container", View.class).setVisibility(View.GONE);
-
-                        displayUrlImage(viewHolder.getView("left_thumbnail", ImageView.class), message.getSenderImageUrl(), true);
-                        viewHolder.getView("left_name", TextView.class).setText(message.getSenderName());
-                        viewHolder.getView("left_message", TextView.class).setText(message.getMessage());
-                        viewHolder.getView("left_time", TextView.class).setText(getDisplayDateTime(mContext, message.getTimestamp()));
+                        viewHolder.getView("img_op_icon", ImageView.class).setVisibility(View.GONE);
+                        viewHolder.getView("message", TextView.class).setText(Html.fromHtml("<font color='#824096'><b>" + message.getSenderName() + "</b></font>: " + message.getMessage()));
                     }
+                    viewHolder.getView("message").setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new AlertDialog.Builder(mContext)
+                                    .setTitle("SendBird")
+                                    .setMessage("Do you want to start 1:1 messaging with " + ((Message) item).getSenderName() + "?")
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Intent data = new Intent();
+                                            data.putExtra("userIds", new String[]{((Message) item).getSenderId()});
+                                            setResult(RESULT_OK, data);
+                                            mDoNotDisconnect = true;
+                                            ChatActivity.this.finish();
+                                        }
+                                    })
+                                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                        }
+                                    })
+                                    .create()
+                                    .show();
+                        }
+                    });
+                    viewHolder.getView("message").setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            new AlertDialog.Builder(mContext)
+                                    .setTitle("SendBird")
+                                    .setMessage("Do you want to delete a message?")
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            SendBird.deleteMessage(((Message)item).getMessageId(), new DeleteMessageHandler() {
+                                                @Override
+                                                public void onError(SendBirdException e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                                @Override
+                                                public void onSuccess(long messageId) {
+                                                    mSendBirdChatAdapter.delete(item);
+                                                    mSendBirdChatAdapter.notifyDataSetChanged();
+                                                    Toast.makeText(mContext, "Message has been deleted.", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                        }
+                                    })
+                                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                        }
+                                    })
+                                    .create()
+                                    .show();
+
+                            return true;
+                        }
+                    });
                     break;
                 case TYPE_SYSTEM_MESSAGE:
-                    SystemMessage systemMessage = (SystemMessage) item;
+                    SystemMessage systemMessage = (SystemMessage)item;
                     viewHolder.getView("message", TextView.class).setText(Html.fromHtml(systemMessage.getMessage()));
                     break;
                 case TYPE_BROADCAST_MESSAGE:
-                    BroadcastMessage broadcastMessage = (BroadcastMessage) item;
+                    BroadcastMessage broadcastMessage = (BroadcastMessage)item;
                     viewHolder.getView("message", TextView.class).setText(Html.fromHtml(broadcastMessage.getMessage()));
                     break;
                 case TYPE_FILELINK:
-                    FileLink fileLink = (FileLink) item;
+                    FileLink fileLink = (FileLink)item;
 
-                    if (fileLink.getSenderId().equals(SendBird.getUserId())) {
-                        viewHolder.getView("left_container", View.class).setVisibility(View.GONE);
-                        viewHolder.getView("right_container", View.class).setVisibility(View.VISIBLE);
-
-                        displayUrlImage(viewHolder.getView("right_thumbnail", ImageView.class), fileLink.getSenderImageUrl(), true);
-                        viewHolder.getView("right_name", TextView.class).setText(fileLink.getSenderName());
-                        if (fileLink.getFileInfo().getType().toLowerCase().startsWith("image")) {
-                            displayUrlImage(viewHolder.getView("right_image", ImageView.class), fileLink.getFileInfo().getUrl());
-                        } else {
-                            viewHolder.getView("right_image", ImageView.class).setImageResource(R.drawable.sendbird_icon_file);
-                        }
-                        viewHolder.getView("right_time", TextView.class).setText(getDisplayDateTime(mContext, fileLink.getTimestamp()));
-                        int readCount = 0;
-                        for (String key : mReadStatus.keySet()) {
-                            if (key.equals(fileLink.getSenderId())) {
-                                continue;
-                            }
-
-                            if (mReadStatus.get(key) < fileLink.getTimestamp()) {
-                                readCount += 1;
-                            }
-                        }
-                        if (readCount < mReadStatus.size() - 1) {
-                            viewHolder.getView("right_status", TextView.class).setText("Unread");
-                        } else {
-                            viewHolder.getView("right_status", TextView.class).setText("");
-                        }
+                    if(fileLink.isOpMessage()) {
+                        viewHolder.getView("img_op_icon", ImageView.class).setVisibility(View.VISIBLE);
+                        viewHolder.getView("txt_sender_name", TextView.class).setText(Html.fromHtml("&nbsp;&nbsp;&nbsp;<font color='#824096'><b>" + fileLink.getSenderName() + "</b></font>: "));
                     } else {
-                        viewHolder.getView("left_container", View.class).setVisibility(View.VISIBLE);
-                        viewHolder.getView("right_container", View.class).setVisibility(View.GONE);
-
-                        displayUrlImage(viewHolder.getView("left_thumbnail", ImageView.class), fileLink.getSenderImageUrl(), true);
-                        viewHolder.getView("left_name", TextView.class).setText(fileLink.getSenderName());
-                        if (fileLink.getFileInfo().getType().toLowerCase().startsWith("image")) {
-                            displayUrlImage(viewHolder.getView("left_image", ImageView.class), fileLink.getFileInfo().getUrl());
-                        } else {
-                            viewHolder.getView("left_image", ImageView.class).setImageResource(R.drawable.sendbird_icon_file);
-                        }
-                        viewHolder.getView("left_time", TextView.class).setText(getDisplayDateTime(mContext, fileLink.getTimestamp()));
+                        viewHolder.getView("img_op_icon", ImageView.class).setVisibility(View.GONE);
+                        viewHolder.getView("txt_sender_name", TextView.class).setText(Html.fromHtml("<font color='#824096'><b>" + fileLink.getSenderName() + "</b></font>: "));
                     }
-                    break;
+                    if(fileLink.getFileInfo().getType().toLowerCase().startsWith("image")) {
+                        viewHolder.getView("file_container").setVisibility(View.GONE);
 
-                case TYPE_TYPING_INDICATOR: {
-                    int itemCount = ((List) item).size();
-                    String typeMsg = ((List) item).get(0)
-                            + ((itemCount > 1) ? " +" + (itemCount - 1) : "")
-                            + ((itemCount > 1) ? " are " : " is ")
-                            + "typing...";
-                    viewHolder.getView("message", TextView.class).setText(typeMsg);
+                        viewHolder.getView("image_container").setVisibility(View.VISIBLE);
+                        viewHolder.getView("txt_image_name", TextView.class).setText(fileLink.getFileInfo().getName());
+                        viewHolder.getView("txt_image_size", TextView.class).setText(Helper.readableFileSize(fileLink.getFileInfo().getSize()));
+                        displayUrlImage(viewHolder.getView("img_thumbnail", ImageView.class), fileLink.getFileInfo().getUrl());
+                    } else {
+                        viewHolder.getView("image_container").setVisibility(View.GONE);
+
+                        viewHolder.getView("file_container").setVisibility(View.VISIBLE);
+                        viewHolder.getView("txt_file_name", TextView.class).setText(fileLink.getFileInfo().getName());
+                        viewHolder.getView("txt_file_size", TextView.class).setText("" + fileLink.getFileInfo().getSize());
+                    }
+                    viewHolder.getView("txt_sender_name").setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new AlertDialog.Builder(mContext)
+                                    .setTitle("SendBird")
+                                    .setMessage("Do you want to start 1:1 messaging with " + ((FileLink) item).getSenderName() + "?")
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Intent data = new Intent();
+                                            data.putExtra("userIds", new String[]{((FileLink) item).getSenderId()});
+                                            setResult(RESULT_OK, data);
+                                            ChatActivity.this.finish();
+                                        }
+                                    })
+                                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                        }
+                                    })
+                                    .create()
+                                    .show();
+                        }
+                    });
+                    viewHolder.getView("img_file_container").setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new AlertDialog.Builder(mContext)
+                                    .setTitle("SendBird")
+                                    .setMessage("Do you want to download this file?")
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            try {
+                                                downloadUrl((FileLink) item, mContext);
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    })
+                                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                        }
+                                    })
+                                    .create()
+                                    .show();
+                        }
+                    });
                     break;
-                }
             }
 
             return convertView;
         }
-
-        public boolean checkTypeStatus() {
-            /**
-             * Clear an old type status.
-             */
-            for (String key : mTypeStatus.keySet()) {
-                Long ts = mTypeStatus.get(key);
-                if (System.currentTimeMillis() - ts > 10 * 1000L) {
-                    mTypeStatus.remove(key);
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
 
         private class ViewHolder {
             private Hashtable<String, View> holder = new Hashtable<String, View>();
@@ -1133,7 +911,6 @@ public class ChatActivity extends AppCompatActivity {
             public void setViewType(int type) {
                 this.type = type;
             }
-
             public void setView(String k, View v) {
                 holder.put(k, v);
             }
@@ -1147,6 +924,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         }
     }
+
 
     private static String getDisplayDateTime(Context context, long milli) {
         Date date = new Date(milli);
@@ -1437,11 +1215,9 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-
     public static class Helper {
-
         public static String generateDeviceUUID(Context context) {
-            String serial = Build.SERIAL;
+            String serial = android.os.Build.SERIAL;
             String androidID = Settings.Secure.ANDROID_ID;
             String deviceUUID = serial + androidID;
 
@@ -1462,6 +1238,7 @@ public class ChatActivity extends AppCompatActivity {
             for (byte b : result) {
                 sb.append(String.format("%02X", b));
             }
+
 
             return sb.toString();
         }
@@ -1501,7 +1278,7 @@ public class ChatActivity extends AppCompatActivity {
                     if ("primary".equalsIgnoreCase(type)) {
                         Hashtable<String, Object> value = new Hashtable<String, Object>();
                         value.put("path", Environment.getExternalStorageDirectory() + "/" + split[1]);
-                        value.put("size", (int) new File((String) value.get("path")).length());
+                        value.put("size", (int)new File((String)value.get("path")).length());
                         value.put("mime", "application/octet-stream");
 
                         return value;
@@ -1532,7 +1309,7 @@ public class ChatActivity extends AppCompatActivity {
                     }
 
                     final String selection = "_id=?";
-                    final String[] selectionArgs = new String[]{
+                    final String[] selectionArgs = new String[] {
                             split[1]
                     };
 
@@ -1550,7 +1327,7 @@ public class ChatActivity extends AppCompatActivity {
                         File file = File.createTempFile("sendbird", ".jpg");
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, new BufferedOutputStream(new FileOutputStream(file)));
                         value.put("path", file.getAbsolutePath());
-                        value.put("size", (int) file.length());
+                        value.put("size", (int)file.length());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -1563,7 +1340,7 @@ public class ChatActivity extends AppCompatActivity {
             else if ("file".equalsIgnoreCase(uri.getScheme())) {
                 Hashtable<String, Object> value = new Hashtable<String, Object>();
                 value.put("path", uri.getPath());
-                value.put("size", (int) new File((String) value.get("path")).length());
+                value.put("size", (int)new File((String)value.get("path")).length());
                 value.put("mime", "application/octet-stream");
 
                 return value;
@@ -1596,8 +1373,8 @@ public class ChatActivity extends AppCompatActivity {
                     int size = cursor.getInt(column_index);
 
                     Hashtable<String, Object> value = new Hashtable<String, Object>();
-                    if (path == null) path = "";
-                    if (mime == null) mime = "application/octet-stream";
+                    if(path == null) path = "";
+                    if(mime == null) mime = "application/octet-stream";
 
                     value.put("path", path);
                     value.put("mime", mime);
@@ -1615,18 +1392,16 @@ public class ChatActivity extends AppCompatActivity {
         private static boolean isExternalStorageDocument(Uri uri) {
             return "com.android.externalstorage.documents".equals(uri.getAuthority());
         }
-
         private static boolean isDownloadsDocument(Uri uri) {
             return "com.android.providers.downloads.documents".equals(uri.getAuthority());
         }
-
         private static boolean isMediaDocument(Uri uri) {
             return "com.android.providers.media.documents".equals(uri.getAuthority());
         }
-
         public static boolean isNewGooglePhotosUri(Uri uri) {
             return "com.google.android.apps.photos.contentprovider".equals(uri.getAuthority());
         }
+
     }
 
     public static class RoundedDrawable extends Drawable {
