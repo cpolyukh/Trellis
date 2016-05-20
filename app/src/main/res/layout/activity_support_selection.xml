@@ -5,7 +5,12 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".LoginActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#fafafa">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
 
 
     <Button
@@ -13,13 +18,25 @@
         android:layout_height="wrap_content"
         android:text="I Want to Give Support"
         android:layout_weight="0.5"
-        android:id="@+id/giveSupportBtn" />
+        android:id="@+id/giveSupportBtn"
+        android:layout_marginTop="260dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/supportbuttons"
+        android:textColor="#fafafa"/>
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
         android:text="I WANT TO SEEK SUPPORT"
-        android:id="@+id/seekSupportBtn" />
+        android:id="@+id/seekSupportBtn"
+        android:layout_marginBottom="80dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/supportbuttons"
+        android:textColor="#fafafa"/>
 
 </LinearLayout>

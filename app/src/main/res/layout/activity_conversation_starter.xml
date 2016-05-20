@@ -4,7 +4,7 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:id="@+id/main"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".LoginActivity">
+    android:paddingBottom="0dp" tools:context=".LoginActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
             android:layout_centerInParent="true"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="#ffffff"
+            android:textColor="#fafafa"
             android:text="CONVERSATION STARTERS"
             />
     </RelativeLayout>
@@ -35,7 +35,9 @@
         android:layout_centerHorizontal="true"
         android:paddingLeft="0dp"
         android:paddingRight="0dp"
-        android:layout_marginTop="58dp"/>
+        android:layout_marginTop="48dp"
+        android:paddingBottom="0dp"
+        android:paddingTop="0dp"/>
 
     <ListView
         android:layout_width="wrap_content"
@@ -46,100 +48,8 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"/>
 
-    <RelativeLayout
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:gravity="bottom"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        xmlns:android="http://schemas.android.com/apk/res/android">
 
-        <android.support.v7.widget.Toolbar  xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#000000"
-            android:minHeight="?attr/actionBarSize"
-            app:contentInsetStart="0dp"
-            app:theme="@style/Base.Theme.AppCompat.CompactMenu" >
-
-            <LinearLayout
-                android:id="@+id/toolbarmenucontainer"
-                android:layout_width="match_parent"
-                android:weightSum="5"
-                android:layout_height="48dp"
-                android:background="@color/background_floating_material_light"
-                android:minHeight="?attr/actionBarSize"
-                app:contentInsetStart="0dp"
-                app:theme="@style/Base.Theme.AppCompat.CompactMenu"
-                android:orientation="horizontal" >
-
-                <ImageButton
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:id="@+id/supportIcon"
-                    android:clickable="true"
-                    android:scaleType="fitXY"
-                    android:background="@null"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:src="@drawable/people" />
-
-                <ImageButton
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:id="@+id/messageIcon"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:scaleType="fitXY"
-                    android:background="@null"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:src="@drawable/msg" />
-
-                <ImageButton
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:id="@+id/conversationIcon"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:scaleType="fitXY"
-                    android:background="@null"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:src="@drawable/convo" />
-
-                <ImageButton
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:id="@+id/readMoreIcon"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:scaleType="fitXY"
-                    android:background="@null"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:src="@drawable/articles" />
-
-                <ImageButton
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:id="@+id/settingsIcon"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:scaleType="fitXY"
-                    android:background="@null"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:src="@drawable/settings" />
-
-            </LinearLayout>
-        </android.support.v7.widget.Toolbar>
-
-
-    </RelativeLayout>
+    <include layout="@layout/toolbar"/>
 
 </RelativeLayout>
 
