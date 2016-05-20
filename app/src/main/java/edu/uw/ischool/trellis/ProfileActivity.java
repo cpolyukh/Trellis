@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -34,6 +35,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -50,7 +52,8 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         overridePendingTransition(R.anim.sendbird_slide_in_from_bottom, R.anim.sendbird_slide_out_to_top);
 
-
+        final Typeface regular = Typeface.createFromAsset(getAssets(), "Futura.ttc");
+        replaceFont("DEFAULT", regular);
 
         app = (MainApp) getApplication();
 
@@ -71,6 +74,32 @@ public class ProfileActivity extends AppCompatActivity {
         ImageView photo = (ImageView) findViewById(R.id.photo);
         TextView name = (TextView) findViewById(R.id.name);
         TextView quoteView = (TextView) findViewById(R.id.quoteView);
+        messageBtn = (Button) findViewById(R.id.messageBtn);
+        favoriteBtn = (Button) findViewById(R.id.favoriteBtn);
+        TextView supportSkillsTitle = (TextView) findViewById(R.id.textView17);
+        TextView supportSkill1 = (TextView) findViewById(R.id.supportSkillListView);
+        TextView supportSkill2 = (TextView) findViewById(R.id.textView7);
+        TextView talkAbout = (TextView) findViewById(R.id.textView22);
+        TextView talkAbout1 = (TextView) findViewById(R.id.conversationTopicsListView);
+        TextView talkAbout2 = (TextView) findViewById(R.id.textView);
+        TextView aboutMeTitle = (TextView) findViewById(R.id.textView26);
+        TextView aboutMe = (TextView) findViewById(R.id.textView27);
+
+        // there has to be a better way...
+        Typeface myTypeface = Typeface.createFromAsset(getAssets(), "Futura.ttc");
+        quoteView.setTypeface(myTypeface);
+        name.setTypeface(myTypeface);
+        supportSkillsTitle.setTypeface(myTypeface);
+        favoriteBtn.setTypeface(myTypeface);
+        messageBtn.setTypeface(myTypeface);
+        supportSkill1.setTypeface(myTypeface);
+        supportSkill2.setTypeface(myTypeface);
+        talkAbout.setTypeface(myTypeface);
+        talkAbout1.setTypeface(myTypeface);
+        talkAbout2.setTypeface(myTypeface);
+        aboutMeTitle.setTypeface(myTypeface);
+        aboutMe.setTypeface(myTypeface);
+
 
         quoteView.setText(quote);
 
@@ -82,8 +111,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
 
-        messageBtn = (Button) findViewById(R.id.messageBtn);
-        favoriteBtn = (Button) findViewById(R.id.favoriteBtn);
+
 
         messageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,6 +178,20 @@ public class ProfileActivity extends AppCompatActivity {
         /********************************************************/
 
 
+    }
+
+    protected static void replaceFont(String staticTypefaceFieldName,
+                                      final Typeface newTypeface) {
+        try {
+            final Field staticField = Typeface.class
+                    .getDeclaredField(staticTypefaceFieldName);
+            staticField.setAccessible(true);
+            staticField.set(null, newTypeface);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void displayUrlImage(ImageView imageView, String url) {

@@ -253,16 +253,22 @@ public class SupportActivity extends AppCompatActivity {
             final TextView quoteView = (TextView) rowView.findViewById(R.id.quoteView);
             ImageView imgThumb = (ImageView) rowView.findViewById(R.id.img_thumbnail);
 
+
             Typeface myTypeface = Typeface.createFromAsset(getAssets(), "Futura.ttc");
             Typeface italic = Typeface.createFromAsset(getAssets(), "Futura_Italic.ttf");
             nameTextView.setTypeface(myTypeface);
             supportingView.setTypeface(myTypeface);
             quoteView.setTypeface(italic);
 
-            if (position % 2 == 0) {
+            if (position % 3 == 0) {
                 quoteView.setText("Having struggled with depression for over 7 years, I am here to listen and be a friend.");
-            } else {
+                supportingView.setText("SUPPORTING 10 FRIENDS");
+            } else if (position % 2 == 0) {
                 quoteView.setText("I'm here to help :)");
+                supportingView.setText("SUPPORTING 2 FRIENDS");
+            } else {
+                quoteView.setText("Having struggled with depression for over 7 years, I am here to listen and be a friend.");
+                supportingView.setText("SUPPORTING 1 FRIEND");
             }
 
             nameTextView.setText(item.getName());
