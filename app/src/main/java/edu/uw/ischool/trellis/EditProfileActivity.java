@@ -5,21 +5,17 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import org.w3c.dom.Text;
+
 import java.util.List;
 import edu.uw.ischool.trellis.UI.EditProfileUpdateActivity;
 
@@ -57,8 +53,8 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-        TextView usernameView = (TextView) findViewById(R.id.textView);
-        TextView quoteView = (TextView) findViewById(R.id.textView9);
+        TextView usernameView = (TextView) findViewById(R.id.name);
+        TextView quoteView = (TextView) findViewById(R.id.quoteView);
 
 
         TextView[] textViews = {usernameView, quoteView,
@@ -89,7 +85,7 @@ public class EditProfileActivity extends AppCompatActivity {
         currentUser = mainApp.getCurrentUser();
         conversationTopicList = (ListView) findViewById(R.id.conversationTopicsListView);
 
-        usernameView.setText(currentUser.getFirstName());
+        usernameView.setText(currentUser.getName());
         quoteView.setText(currentUser.getQuote());
 
         List<String> conversationTopicsList = currentUser.getConversationTopics();

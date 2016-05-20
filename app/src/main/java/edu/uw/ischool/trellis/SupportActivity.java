@@ -250,7 +250,7 @@ public class SupportActivity extends AppCompatActivity {
 
             TextView nameTextView = (TextView) rowView.findViewById(R.id.txt_name);
             TextView supportingView = (TextView) rowView.findViewById(R.id.supportingView);
-            TextView quoteView = (TextView) rowView.findViewById(R.id.quoteView);
+            final TextView quoteView = (TextView) rowView.findViewById(R.id.quoteView);
             ImageView imgThumb = (ImageView) rowView.findViewById(R.id.img_thumbnail);
 
             Typeface myTypeface = Typeface.createFromAsset(getAssets(), "Futura.ttc");
@@ -258,6 +258,12 @@ public class SupportActivity extends AppCompatActivity {
             nameTextView.setTypeface(myTypeface);
             supportingView.setTypeface(myTypeface);
             quoteView.setTypeface(italic);
+
+            if (position % 2 == 0) {
+                quoteView.setText("Having struggled with depression for over 7 years, I am here to listen and be a friend.");
+            } else {
+                quoteView.setText("I'm here to help :)");
+            }
 
             nameTextView.setText(item.getName());
             displayUrlImage(imgThumb, item.getImageUrl());
@@ -269,6 +275,7 @@ public class SupportActivity extends AppCompatActivity {
                     next.putExtra("firstName", getItem(position).getFirstName());
                     next.putExtra("lastName", getItem(position).getLastName());
                     next.putExtra("id", getItem(position).getId());
+                    next.putExtra("quote", quoteView.getText());
                     startActivity(next);
                 }
             });

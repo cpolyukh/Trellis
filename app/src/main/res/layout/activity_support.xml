@@ -28,7 +28,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#ffffff"
-                android:text="I&apos;VE BEEN SUPPORTING..."
+                android:text="SUPPORT"
                 />
 
         </RelativeLayout>

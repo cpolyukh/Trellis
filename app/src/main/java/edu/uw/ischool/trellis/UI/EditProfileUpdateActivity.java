@@ -49,8 +49,8 @@ public class EditProfileUpdateActivity extends AppCompatActivity {
             }
         });
 
-        TextView usernameView = (TextView) findViewById(R.id.textView);
-        TextView quoteView = (TextView) findViewById(R.id.textView9);
+        TextView usernameView = (TextView) findViewById(R.id.name);
+        TextView quoteView = (TextView) findViewById(R.id.quoteView);
 
         TextView[] textViews = {usernameView, quoteView,
                 (TextView) findViewById(R.id.textView17), (TextView) findViewById(R.id.textView22),
