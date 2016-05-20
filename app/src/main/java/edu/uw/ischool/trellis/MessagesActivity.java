@@ -76,6 +76,12 @@ public class MessagesActivity extends FragmentActivity {
         mAdapter = new UserAdapter(getApplicationContext(), app.getCurrentUser());
         ListView list = (ListView) findViewById(R.id.list);
 
+        LinearLayout messagesLayoutIcon = (LinearLayout) findViewById(R.id.messagesLayoutIcon);
+        messagesLayoutIcon.setBackgroundColor(getResources().getColor(R.color.light_gray));
+
+        ImageView icon = (ImageView) messagesLayoutIcon.findViewById(R.id.messagesLayoutIcon_img);
+        icon.setImageDrawable(getResources().getDrawable(R.drawable.messages01));
+
 
         list.setAdapter(mAdapter);
 

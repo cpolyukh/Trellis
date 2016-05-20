@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,8 +36,15 @@ public class EditProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_profile);
         overridePendingTransition(R.anim.sendbird_slide_in_from_bottom, R.anim.sendbird_slide_out_to_top);
 
-        app = (MainApp) getApplication();
-        app.changeStatusBarColor(this);
+        mainApp = (MainApp) getApplication();
+        mainApp.changeStatusBarColor(this);
+
+        LinearLayout profileLayoutIcon = (LinearLayout) findViewById(R.id.profileLayoutIcon);
+        profileLayoutIcon.setBackgroundColor(getResources().getColor(R.color.light_gray));
+
+        ImageView icon = (ImageView) profileLayoutIcon.findViewById(R.id.profileLayoutIcon_img);
+        icon.setImageDrawable(getResources().getDrawable(R.drawable.settings01));
+
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 

@@ -66,6 +66,12 @@ public class SupportActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        LinearLayout friendsLayoutIcon = (LinearLayout) findViewById(R.id.friendsLayoutIcon);
+        friendsLayoutIcon.setBackgroundColor(getResources().getColor(R.color.light_gray));
+
+        ImageView icon = (ImageView) friendsLayoutIcon.findViewById(R.id.friendsLayoutIcon_img);
+        icon.setImageDrawable(getResources().getDrawable(R.drawable.friends01));
+
 
         //TODO: Fix this code! Almost working
 

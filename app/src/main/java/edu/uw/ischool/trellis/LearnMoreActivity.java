@@ -34,6 +34,12 @@ public class LearnMoreActivity extends AppCompatActivity {
             current.setTypeface(myTypeface);
         }
 
+        LinearLayout learnMoreLayoutIcon = (LinearLayout) findViewById(R.id.learnMoreLayoutIcon);
+        learnMoreLayoutIcon.setBackgroundColor(getResources().getColor(R.color.light_gray));
+
+        ImageView icon = (ImageView) learnMoreLayoutIcon.findViewById(R.id.learnMoreLayoutIcon_img);
+        icon.setImageDrawable(getResources().getDrawable(R.drawable.learn01));
+
 
         app = (MainApp) getApplication();
         app.changeStatusBarColor(this);

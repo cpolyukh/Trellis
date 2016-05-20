@@ -48,6 +48,13 @@ public class ConversationStarterActivity extends AppCompatActivity {
 
         app.changeStatusBarColor(this);
 
+        LinearLayout conversationStartersLayoutIcon = (LinearLayout) findViewById(R.id.conversationStartersLayoutIcon);
+        conversationStartersLayoutIcon.setBackgroundColor(getResources().getColor(R.color.light_gray));
+
+        ImageView icon = (ImageView) conversationStartersLayoutIcon.findViewById(R.id.conversationStartersLayoutIcon_img);
+        icon.setImageDrawable(getResources().getDrawable(R.drawable.conversation01));
+
+
         dropdown = (Spinner) findViewById(R.id.spinner);
         final String[] categories = ConversationCategory.getConversationStarterTitlesArray();
         final List<String> categoriesList = ConversationCategory.getAllConversationStarterTitles();
