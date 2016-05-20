@@ -89,9 +89,10 @@
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="376dp"
+            android:layout_height="wrap_content"
             android:id="@+id/lstSupporters"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:layout_marginTop="25dp" />
     </FrameLayout>
 
     <include layout="@layout/toolbar"/>
