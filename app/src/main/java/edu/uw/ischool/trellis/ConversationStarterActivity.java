@@ -1,11 +1,14 @@
 package edu.uw.ischool.trellis;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -14,6 +17,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +35,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 public class ConversationStarterActivity extends AppCompatActivity {
@@ -53,6 +59,8 @@ public class ConversationStarterActivity extends AppCompatActivity {
 
         ImageView icon = (ImageView) conversationStartersLayoutIcon.findViewById(R.id.conversationStartersLayoutIcon_img);
         icon.setImageDrawable(getResources().getDrawable(R.drawable.conversation01));
+        app.setupToolBar(ConversationStarterActivity.this);
+
 
 
         dropdown = (Spinner) findViewById(R.id.spinner);
@@ -72,7 +80,7 @@ public class ConversationStarterActivity extends AppCompatActivity {
         String title = dropdown.getSelectedItem().toString();
         final String[] currentItems = ConversationCategory.getConversationStartersArray(title);
 
-        final ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, currentItems);
+        final ArrayAdapter<String> categoryAdapter = new CustomArrayAdapter(getBaseContext(), currentItems);
         categoryList.setAdapter(categoryAdapter);
 
 
@@ -89,7 +97,7 @@ public class ConversationStarterActivity extends AppCompatActivity {
                 } else {
                     items = ConversationCategory.getConversationStartersArray(s);
                 }
-                ArrayAdapter<String> newCategoryAdapter = new ArrayAdapter<String>(current, android.R.layout.simple_list_item_1, items);
+                ArrayAdapter<String> newCategoryAdapter = new CustomArrayAdapter(getBaseContext(), items);
                 categoryList.setAdapter(newCategoryAdapter);
             }
 
@@ -118,61 +126,36 @@ public class ConversationStarterActivity extends AppCompatActivity {
 
 
 
-        /********************************************************/
-        /********************** NEW TOOLBAR SETUP *******************/
-        /********************************************************/
-        LinearLayout friendsIcon = (LinearLayout) findViewById(R.id.friendsLayoutIcon);
-        LinearLayout messagesIcon = (LinearLayout) findViewById(R.id.messagesLayoutIcon);
-        LinearLayout conversationIcon = (LinearLayout) findViewById(R.id.conversationStartersLayoutIcon);
-        LinearLayout learnMoreIcon = (LinearLayout) findViewById(R.id.learnMoreLayoutIcon);
-        LinearLayout profileIcon = (LinearLayout) findViewById(R.id.profileLayoutIcon);
-
-
-        friendsIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent next = new Intent(ConversationStarterActivity.this, SupportActivity.class);
-                startActivity(next);
-            }
-        });
-
-        messagesIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent next = new Intent(ConversationStarterActivity.this, MessagesActivity.class);
-                startActivity(next);
-            }
-        });
-
-        conversationIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent next = new Intent(ConversationStarterActivity.this, ConversationStarterActivity.class);
-                startActivity(next);
-            }
-        });
-
-        learnMoreIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent next = new Intent(ConversationStarterActivity.this, LearnMoreActivity.class);
-                startActivity(next);
-            }
-        });
-
-        profileIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent next = new Intent(ConversationStarterActivity.this, EditProfileActivity.class);
-                startActivity(next);
-            }
-        });
-        /********************************************************/
-        /********************************************************/
-        /********************************************************/
-
 
     }
+
+    public class CustomArrayAdapter extends ArrayAdapter<String> {
+        private final Context context;
+        private final String[] values;
+
+        public CustomArrayAdapter(Context context, String[] values) {
+            super(context, android.R.layout.simple_list_item_1, values);
+            this.context = context;
+            this.values = values;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            TextView rowView = (TextView) inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+            Typeface myTypeface = Typeface.createFromAsset(getAssets(), "Futura.ttc");
+            rowView.setText(values[position]);
+            rowView.setTypeface(myTypeface);
+
+            return rowView;
+
+        }
+    }
+
+
 
     private static class MySpinnerAdapter<String> extends ArrayAdapter<String> {
         // Initialise custom font, for example:

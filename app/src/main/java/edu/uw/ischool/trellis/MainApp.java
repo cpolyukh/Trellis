@@ -3,9 +3,12 @@ package edu.uw.ischool.trellis;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Application;
+import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -80,5 +83,59 @@ public class MainApp extends Application {
         inputStream.close();
 
         return new String(buffer, "UTF-8");
+    }
+
+    public void setupToolBar(final Activity activity) {
+        LinearLayout friendsIcon = (LinearLayout) activity.findViewById(R.id.friendsLayoutIcon);
+        LinearLayout messagesIcon = (LinearLayout) activity.findViewById(R.id.messagesLayoutIcon);
+        LinearLayout conversationIcon = (LinearLayout) activity.findViewById(R.id.conversationStartersLayoutIcon);
+        LinearLayout learnMoreIcon = (LinearLayout) activity.findViewById(R.id.learnMoreLayoutIcon);
+        LinearLayout profileIcon = (LinearLayout) activity.findViewById(R.id.profileLayoutIcon);
+
+
+        friendsIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(activity, SupportActivity.class);
+                next.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(next);
+            }
+        });
+
+        messagesIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(activity, MessagesActivity.class);
+                next.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(next);
+            }
+        });
+
+        conversationIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(activity, ConversationStarterActivity.class);
+                next.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(next);
+            }
+        });
+
+        learnMoreIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(activity, LearnMoreActivity.class);
+                next.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(next);
+            }
+        });
+
+        profileIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(activity, EditProfileActivity.class);
+                next.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(next);
+            }
+        });
     }
 }

@@ -55,13 +55,15 @@ public class SupportSelectionActivity extends AppCompatActivity implements Seria
         });
 
         Typeface myTypeface = Typeface.createFromAsset(getAssets(), "Futura.ttc");
+        Typeface myTypefaceBold = Typeface.createFromAsset(getAssets(), "Futura_Bold.ttf");
+
         TextView textView1 = (TextView) findViewById(R.id.welcome);
         TextView textView2 = (TextView) findViewById(R.id.welcomemessage);
 
         textView1.setTypeface(myTypeface);
         textView2.setTypeface(myTypeface);
-        seekSupportBtn.setTypeface(myTypeface);
-        giveSupportBtn.setTypeface(myTypeface);
+        seekSupportBtn.setTypeface(myTypefaceBold);
+        giveSupportBtn.setTypeface(myTypefaceBold);
 
     }
 

@@ -47,27 +47,25 @@
         android:layout_width="fill_parent"
         android:layout_height="70dp"
         android:text="I Want to Give Support"
+        android:textAllCaps="false"
         android:id="@+id/giveSupportBtn"
         android:layout_marginTop="40dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/supporterbutton"
         android:textSize="16dp"
-        android:textColor="#fafafa"/>
+        android:textColor="#fafafa" />
 
     <Button
         android:layout_below="@id/giveSupportBtn"
         android:layout_gravity="bottom"
         android:layout_width="fill_parent"
         android:layout_height="70dp"
-        android:text="I WANT TO SEEK SUPPORT"
+        android:text="I Want to Seek Support"
+        android:textAllCaps="false"
         android:id="@+id/seekSupportBtn"
         android:textSize="16dp"
         android:layout_marginBottom="15dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/supportbuttons"
         android:textColor="#fafafa"/>
 

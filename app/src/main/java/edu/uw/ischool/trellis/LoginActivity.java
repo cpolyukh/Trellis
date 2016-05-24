@@ -58,14 +58,19 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         overridePendingTransition(R.anim.sendbird_slide_in_from_bottom, R.anim.sendbird_slide_out_to_top);
 
+        final LoginButton button = (LoginButton) findViewById(R.id.login_button);
+        button.setCompoundDrawablesWithIntrinsicBounds(R.drawable.fb_icon,0,0,0);
+
+
 
         app = (MainApp) getApplication();
         app.changeStatusBarColor(this);
 
         Typeface myTypeface = Typeface.createFromAsset(getAssets(), "Futura.ttc");
+        Typeface myTypefaceBold = Typeface.createFromAsset(getAssets(), "Futura_Bold.ttf");
         Button guestButton = (Button) findViewById(R.id.guestButton);
 
-        guestButton.setTypeface(myTypeface);
+        guestButton.setTypeface(myTypefaceBold);
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("public_profile", "user_friends");
@@ -149,6 +154,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(LoginActivity.this, LearnMoreActivity.class);
+                User user = new User("USER", "GUEST", "", "", false, "", "00000");
+                app.setCurrentUser(user);
                 startActivity(next);
             }
         });
