@@ -63,7 +63,7 @@
             android:name=".ChatActivity"
             android:label="@string/title_activity_edit_profile"
             android:theme="@style/AppTheme"></activity>
-        <activity android:name=".UI.EditProfileUpdateActivity"></activity>
+        <activity android:name=".EditProfileUpdateActivity"></activity>
     </application>
 
 </manifest>
