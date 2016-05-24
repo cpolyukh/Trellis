@@ -17,7 +17,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.List;
-import edu.uw.ischool.trellis.UI.EditProfileUpdateActivity;
 
 
 public class EditProfileActivity extends AppCompatActivity {

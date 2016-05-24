@@ -98,11 +98,32 @@
                 android:layout_alignParentStart="true" />
 
             <ListView
+                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:id="@+id/supportSkillListView"
                 android:layout_below="@+id/textView17"
                 android:textColor="#4d4d4d"/>
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/imageView2"
+                android:layout_alignBottom="@+id/addSkill"
+                android:layout_alignTop="@+id/addSkill"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/add"
+                android:onClick="addItems"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/supportSkillListView"
+                android:id="@+id/addSkill"
+                android:layout_toRightOf="@id/imageView2"
+                android:textSize="15dp"
+                android:hint="Type and press the &quot;+&quot; to add a skill"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -113,9 +134,28 @@
                 android:id="@+id/textView22"
                 android:layout_marginTop="24dp"
                 android:textColor="#2b383f"
-                android:layout_below="@+id/supportSkillListView"
+                android:layout_below="@+id/addSkill"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/imageView3"
+                android:layout_alignBottom="@+id/addConversation"
+                android:layout_alignTop="@+id/addConversation"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/add"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/conversationTopicsListView"
+                android:id="@+id/addConversation"
+                android:layout_toRightOf="@id/imageView3"
+                android:textSize="15dp"
+                android:hint="Type and press the &quot;+&quot; to add a topic"/>
 
             <ListView
                 android:layout_width="wrap_content"
@@ -130,7 +170,7 @@
                 android:textSize="20sp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="ABOUT ME"
-                android:layout_below="@+id/conversationTopicsListView"
+                android:layout_below="@+id/addConversation"
                 android:id="@+id/textView26"
                 android:layout_marginTop="24dp"
                 android:textColor="#2b383f"
@@ -149,6 +189,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:paddingLeft="10dp" />
+
 
         </RelativeLayout>
     </ScrollView>
