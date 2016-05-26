@@ -41,11 +41,11 @@
             android:layout_toEndOf="@+id/photo"
             android:textColor="#fafafa" />
 
-        <TextView
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Enter a personalized quote about yourself that you&apos;d like to make public"
+            android:hint="Enter a personalized quote about yourself that you&apos;d like to make public"
             android:id="@+id/quoteView"
             android:layout_below="@+id/name"
             android:layout_toRightOf="@+id/photo"
@@ -178,17 +178,18 @@
                 android:layout_alignParentStart="true" />
 
 
-            <TextView
+            <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Add a personalized bio about yourself here if there is anything else you want to share with anyone viewing your profile."
+                android:hint="Add a personalized bio about yourself here if there is anything else you want to share with anyone viewing your profile."
                 android:id="@+id/textView27"
-                android:textColor="#4d4d4d"
                 android:layout_below="@+id/textView26"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:paddingLeft="10dp" />
+                android:paddingLeft="10dp"
+                android:textSize="15dp"
+                android:textColor="#6d6d6d"/>
 
         </RelativeLayout>
     </ScrollView>

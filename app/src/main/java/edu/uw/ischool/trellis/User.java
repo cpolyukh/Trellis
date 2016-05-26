@@ -32,12 +32,20 @@ public class User implements Serializable {
         supportSkills.add("- Add any support skills you have to offer!");
         this.conversationTopics = new ArrayList<String>();
         conversationTopics.add("- Add any topics of conversation you feel confortable discussing!");
+
+        if (this.bio == null || this.bio.equals("")) {
+            this.bio = "Add a personalized bio about yourself here if there is anything else you want to share with anyone viewing your profile.";
+        }
+
+        if (this.quote == null || this.quote.equals("")) {
+            this.quote = "Enter a personalized quote about yourself that you'd like to make public";
+        }
+
         try {
             this.friends = new JSONArray(friends);
         } catch (JSONException e) {
             this.friends = new JSONArray();
         }
-
     }
 
     public String getName() {

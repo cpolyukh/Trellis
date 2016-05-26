@@ -37,6 +37,14 @@ public class EditProfileUpdateActivity extends AppCompatActivity {
     ImageView addConversationButton;
     EditText addSkill;
     EditText addConversation;
+    Button editButton;
+    ScrollView profileView;
+    RelativeLayout profileHeader;
+    TextView usernameView;
+    TextView quoteView;
+    TextView bioView;
+    boolean firstSkillAdded;
+    boolean firstTopicAdded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,51 +55,67 @@ public class EditProfileUpdateActivity extends AppCompatActivity {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         mainApp.setupToolBar(this);
         mainApp.changeStatusBarColor(this);
+        firstSkillAdded = false;
+        firstTopicAdded = false;
 
+        //Set up font
         Typeface myTypeface = Typeface.createFromAsset(getAssets(), "Futura.ttc");
 
-        Button editButton = (Button) findViewById(R.id.editButton);
-        editButton.setTypeface(myTypeface);
+        //Set up all buttons, views, fields, etc.
+        editButton = (Button) findViewById(R.id.editButton);
+        profileView = (ScrollView) findViewById(R.id.profileView);
+        profileHeader = (RelativeLayout) findViewById(R.id.profileHeader);
+        addSkill = (EditText) findViewById(R.id.addSkill);
+        addConversation = (EditText) findViewById(R.id.addConversation);
+        usernameView = (TextView) findViewById(R.id.name);
+        quoteView = (TextView) findViewById(R.id.quoteView);
+        bioView = (TextView) findViewById(R.id.textView27);
 
+        currentUser = mainApp.getCurrentUser();
+
+        //When the user clicks the edit button, it takes them to the edit profile page
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String bioText = bioView.getText().toString();
+                if (!bioText.equals("")) {
+                    currentUser.setBio(bioText);
+                }
+
+                String quoteText = quoteView.getText().toString();
+                if (!quoteText.equals("")) {
+                    currentUser.setQuote(quoteText);
+                }
+
                 Intent next = new Intent(EditProfileUpdateActivity.this, EditProfileActivity.class);
                 startActivity(next);
             }
         });
 
+        // Autofills current user's username and quote
+        usernameView.setText(currentUser.getName());
+        quoteView.setHint(currentUser.getQuote());
+        bioView.setHint(currentUser.getBio());
 
         // Overrides all fonts of TextView children
-        ScrollView profileView = (ScrollView) findViewById(R.id.profileView);
-        RelativeLayout profileHeader = (RelativeLayout) findViewById(R.id.profileHeader);
         overrideFonts(getBaseContext(), profileView);
         overrideFonts(getBaseContext(), profileHeader);
-        addSkill = (EditText) findViewById(R.id.addSkill);
-        addConversation = (EditText) findViewById(R.id.addConversation);
-
-
-        // Gets Current user and autofills their user name and quote
-        currentUser = mainApp.getCurrentUser();
-
-        TextView usernameView = (TextView) findViewById(R.id.name);
-        TextView quoteView = (TextView) findViewById(R.id.quoteView);
-
-        usernameView.setText(currentUser.getName());
-        //quoteView.setText(currentUser.getQuote());
-
-
+        editButton.setTypeface(myTypeface);
+        usernameView.setTypeface(myTypeface);
+        quoteView.setTypeface(myTypeface);
+        bioView.setTypeface(myTypeface);
 
         // Adds existing support skills list and onclick listener
         supportSkillList = (LinearLayout) findViewById(R.id.supportSkillListView);
         supportAdapter = new MyArrayAdapter<>(getBaseContext(),
                 android.R.layout.simple_expandable_list_item_1, supportSkillsList);
 
-        final int supportAdapterCount = supportAdapter.getCount();
+        List<String> currentSupportSkills = currentUser.getSupportSkills();
+        final int supportAdapterCount = currentSupportSkills.size();
 
         for (int i = 0; i < supportAdapterCount; i++) {
-            View item = supportAdapter.getView(i, null, null);
-            supportSkillList.addView(item);
+            TextView tv = (TextView) newItem(currentSupportSkills.get(i));
+            supportSkillList.addView(tv);
         }
 
         supportSkillList.setScrollContainer(false);
@@ -103,7 +127,15 @@ public class EditProfileUpdateActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String toAdd = "- " + addSkill.getText().toString();
                 if (!toAdd.isEmpty()) {
+                    if (!firstSkillAdded)
+                    {
+                        firstSkillAdded = true;
+                        currentUser.setSupportSkills(new ArrayList<String>());
+                        supportSkillList.removeAllViews();
+                    }
+
                     TextView tv = (TextView) newItem(toAdd);
+                    currentUser.addSupportSkill(toAdd);
                     supportSkillList.addView(tv);
                     addSkill.getText().clear();
                 }
@@ -117,11 +149,12 @@ public class EditProfileUpdateActivity extends AppCompatActivity {
         conversationTopicsAdapter = new MyArrayAdapter<>(getBaseContext(),
                 android.R.layout.simple_expandable_list_item_1, conversationTopicsList);
 
-        final int conversationAdapterCount = conversationTopicsAdapter.getCount();
+        List<String> currentConversationTopics = currentUser.getConversationTopics();
+        final int conversationAdapterCount = currentConversationTopics.size();
 
         for (int i = 0; i < conversationAdapterCount; i++) {
-            View item = conversationTopicsAdapter.getView(i, null, null);
-            conversationTopicList.addView(item);
+            TextView tv = (TextView) newItem(currentConversationTopics.get(i));
+            conversationTopicList.addView(tv);
         }
 
         addConversationButton = (ImageView) findViewById(R.id.addConvoBtn);
@@ -130,16 +163,20 @@ public class EditProfileUpdateActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String toAdd = "- " + addConversation.getText().toString();
                 if(!toAdd.isEmpty()) {
+                    if (!firstTopicAdded)
+                    {
+                        firstTopicAdded = true;
+                        currentUser.setConversationTopics(new ArrayList<String>());
+                        conversationTopicList.removeAllViews();
+                    }
+
                     TextView tv = (TextView) newItem(toAdd);
+                    currentUser.addSupportConversationTopic(toAdd);
                     conversationTopicList.addView(tv);
                     addConversation.getText().clear();
                 }
             }
         });
-
-
-
-
     }
 
     private View newItem(String text) {
@@ -154,7 +191,6 @@ public class EditProfileUpdateActivity extends AppCompatActivity {
         tv.setText(text);
 
         return tv;
-
     }
 
     private void overrideFonts(final Context context, final View v) {

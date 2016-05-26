@@ -34,12 +34,10 @@ public class SupportSelectionActivity extends AppCompatActivity implements Seria
         app = (MainApp) getApplication();
         app.changeStatusBarColor(this);
 
-
         seekSupportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(SupportSelectionActivity.this, LearnMoreActivity.class);
-
                 startActivity(next);
 
             }
@@ -50,7 +48,6 @@ public class SupportSelectionActivity extends AppCompatActivity implements Seria
             public void onClick(View v) {
                 Intent next = new Intent(SupportSelectionActivity.this, LearnMoreActivity.class);
                 startActivity(next);
-
             }
         });
 
