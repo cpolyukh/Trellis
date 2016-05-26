@@ -28,8 +28,9 @@ public class EditProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_profile);
+        setContentView(R.layout.test_layout);
         overridePendingTransition(R.anim.sendbird_slide_in_from_bottom, R.anim.sendbird_slide_out_to_top);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         mainApp = (MainApp) getApplication();
         mainApp.changeStatusBarColor(this);
@@ -41,7 +42,6 @@ public class EditProfileActivity extends AppCompatActivity {
         icon.setImageDrawable(getResources().getDrawable(R.drawable.settings01));
 
 
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         Button editButton = (Button) findViewById(R.id.editButton);
         editButton.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +85,7 @@ public class EditProfileActivity extends AppCompatActivity {
         conversationTopicList = (ListView) findViewById(R.id.conversationTopicsListView);
 
         usernameView.setText(currentUser.getName());
-        quoteView.setText(currentUser.getQuote());
+        //quoteView.setText(currentUser.getQuote());
 
         List<String> conversationTopicsList = currentUser.getConversationTopics();
 
@@ -95,60 +95,7 @@ public class EditProfileActivity extends AppCompatActivity {
         conversationTopicList.setAdapter(conversationTopicsAdapter);
 
 
-
-
-        /********************************************************/
-        /********************** NEW TOOLBAR SETUP *******************/
-        /********************************************************/
-        LinearLayout friendsIcon = (LinearLayout) findViewById(R.id.friendsLayoutIcon);
-        LinearLayout messagesIcon = (LinearLayout) findViewById(R.id.messagesLayoutIcon);
-        LinearLayout conversationIcon = (LinearLayout) findViewById(R.id.conversationStartersLayoutIcon);
-        LinearLayout learnMoreIcon = (LinearLayout) findViewById(R.id.learnMoreLayoutIcon);
-        LinearLayout profileIcon = (LinearLayout) findViewById(R.id.profileLayoutIcon);
-
-
-        friendsIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent next = new Intent(EditProfileActivity.this, SupportActivity.class);
-                startActivity(next);
-            }
-        });
-
-        messagesIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent next = new Intent(EditProfileActivity.this, MessagesActivity.class);
-                startActivity(next);
-            }
-        });
-
-        conversationIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent next = new Intent(EditProfileActivity.this, ConversationStarterActivity.class);
-                startActivity(next);
-            }
-        });
-
-        learnMoreIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent next = new Intent(EditProfileActivity.this, LearnMoreActivity.class);
-                startActivity(next);
-            }
-        });
-
-        profileIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent next = new Intent(EditProfileActivity.this, EditProfileActivity.class);
-                startActivity(next);
-            }
-        });
-        /********************************************************/
-        /********************************************************/
-        /********************************************************/
+        mainApp.setupToolBar(this);
 
     }
 

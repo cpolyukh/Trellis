@@ -9,6 +9,8 @@
     <string name="title_activity_messages">MessagesActivity</string>
     <string name="title_activity_conversation_starter">ConversationStarterActivity</string>
     <string name="title_activity_edit_profile">EditProfileActivity</string>
+    <string name="title_activity_chat">ChatActivity</string>
+    <string name="title_activity_edit_profle_update">EditProfileUpdateActivity</string>
     <string name="facebook_app_id">276597776012810</string>
 </resources>
 

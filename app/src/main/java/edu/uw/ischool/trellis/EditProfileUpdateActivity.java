@@ -6,23 +6,27 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class EditProfileUpdateActivity extends AppCompatActivity {
-    ListView supportSkillList;
-    ListView conversationTopicList;
+    LinearLayout supportSkillList;
+    LinearLayout conversationTopicList;
     MainApp mainApp;
     User currentUser;
     List<String> supportSkillsList = new ArrayList<String>();
@@ -38,10 +42,17 @@ public class EditProfileUpdateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile_update);
-
+        mainApp = (MainApp) getApplication();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        mainApp.setupToolBar(this);
+        mainApp.changeStatusBarColor(this);
+
+        Typeface myTypeface = Typeface.createFromAsset(getAssets(), "Futura.ttc");
 
         Button editButton = (Button) findViewById(R.id.editButton);
+        editButton.setTypeface(myTypeface);
+
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,120 +61,115 @@ public class EditProfileUpdateActivity extends AppCompatActivity {
             }
         });
 
-        TextView usernameView = (TextView) findViewById(R.id.name);
-        TextView quoteView = (TextView) findViewById(R.id.quoteView);
 
-        TextView[] textViews = {usernameView, quoteView,
-                (TextView) findViewById(R.id.textView17), (TextView) findViewById(R.id.textView22),
-                (TextView) findViewById(R.id.textView26), (TextView) findViewById(R.id.textView27)};
+        // Overrides all fonts of TextView children
+        ScrollView profileView = (ScrollView) findViewById(R.id.profileView);
+        RelativeLayout profileHeader = (RelativeLayout) findViewById(R.id.profileHeader);
+        overrideFonts(getBaseContext(), profileView);
+        overrideFonts(getBaseContext(), profileHeader);
         addSkill = (EditText) findViewById(R.id.addSkill);
         addConversation = (EditText) findViewById(R.id.addConversation);
 
-        Typeface myTypeface = Typeface.createFromAsset(getAssets(), "Futura.ttc");
-        for (TextView current : textViews)
-        {
-            current.setTypeface(myTypeface);
-        }
-        addSkill.setTypeface(myTypeface);
-        editButton.setTypeface(myTypeface);
-        addConversation.setTypeface(myTypeface);
 
-        mainApp = (MainApp) getApplication();
+        // Gets Current user and autofills their user name and quote
         currentUser = mainApp.getCurrentUser();
-        supportSkillList = (ListView) findViewById(R.id.supportSkillListView);
 
-        supportSkillsList = currentUser.getSupportSkills();
+        TextView usernameView = (TextView) findViewById(R.id.name);
+        TextView quoteView = (TextView) findViewById(R.id.quoteView);
+
+        usernameView.setText(currentUser.getName());
+        //quoteView.setText(currentUser.getQuote());
+
+
+
+        // Adds existing support skills list and onclick listener
+        supportSkillList = (LinearLayout) findViewById(R.id.supportSkillListView);
         supportAdapter = new MyArrayAdapter<>(getBaseContext(),
                 android.R.layout.simple_expandable_list_item_1, supportSkillsList);
 
-        supportSkillList.setAdapter(supportAdapter);
+        final int supportAdapterCount = supportAdapter.getCount();
 
+        for (int i = 0; i < supportAdapterCount; i++) {
+            View item = supportAdapter.getView(i, null, null);
+            supportSkillList.addView(item);
+        }
 
-        mainApp = (MainApp) getApplication();
-        currentUser = mainApp.getCurrentUser();
-        conversationTopicList = (ListView) findViewById(R.id.conversationTopicsListView);
-
-
-        usernameView.setText(currentUser.getName());
-        quoteView.setText(currentUser.getQuote());
-
-        conversationTopicsList = currentUser.getConversationTopics();
-
-        conversationTopicsAdapter = new MyArrayAdapter<>(getBaseContext(),
-                android.R.layout.simple_expandable_list_item_1, conversationTopicsList);
-
-        conversationTopicList.setAdapter(conversationTopicsAdapter);
+        supportSkillList.setScrollContainer(false);
 
         //When "+" button is clicked to add a new skill
-        addSkillButton = (ImageView) findViewById(R.id.imageView2);
+        addSkillButton = (ImageView) findViewById(R.id.addSkillBtn);
         addSkillButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addItems(v);
+                String toAdd = "- " + addSkill.getText().toString();
+                if (!toAdd.isEmpty()) {
+                    TextView tv = (TextView) newItem(toAdd);
+                    supportSkillList.addView(tv);
+                    addSkill.getText().clear();
+                }
+
             }
         });
 
-        addConversationButton = (ImageView) findViewById(R.id.imageView3);
+
+        // Adds existing conversation topics list and onclick listener
+        conversationTopicList = (LinearLayout) findViewById(R.id.conversationTopicsListView);
+        conversationTopicsAdapter = new MyArrayAdapter<>(getBaseContext(),
+                android.R.layout.simple_expandable_list_item_1, conversationTopicsList);
+
+        final int conversationAdapterCount = conversationTopicsAdapter.getCount();
+
+        for (int i = 0; i < conversationAdapterCount; i++) {
+            View item = conversationTopicsAdapter.getView(i, null, null);
+            conversationTopicList.addView(item);
+        }
+
+        addConversationButton = (ImageView) findViewById(R.id.addConvoBtn);
         addConversationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addConversations(v);
+                String toAdd = "- " + addConversation.getText().toString();
+                if(!toAdd.isEmpty()) {
+                    TextView tv = (TextView) newItem(toAdd);
+                    conversationTopicList.addView(tv);
+                    addConversation.getText().clear();
+                }
             }
         });
 
-        /********************************************************/
-        /********************** NEW TOOLBAR SETUP *******************/
-        /********************************************************/
-        LinearLayout friendsIcon = (LinearLayout) findViewById(R.id.friendsLayoutIcon);
-        LinearLayout messagesIcon = (LinearLayout) findViewById(R.id.messagesLayoutIcon);
-        LinearLayout conversationIcon = (LinearLayout) findViewById(R.id.conversationStartersLayoutIcon);
-        LinearLayout learnMoreIcon = (LinearLayout) findViewById(R.id.learnMoreLayoutIcon);
-        LinearLayout profileIcon = (LinearLayout) findViewById(R.id.profileLayoutIcon);
 
 
-        friendsIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent next = new Intent(EditProfileUpdateActivity.this, SupportActivity.class);
-                startActivity(next);
+
+    }
+
+    private View newItem(String text) {
+        LayoutInflater inflater = (LayoutInflater)getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        TextView tv = (TextView) inflater.inflate(android.R.layout.simple_expandable_list_item_1, null);
+        tv.setTextColor(Color.parseColor("#6d6d6d"));
+        Typeface font = Typeface.createFromAsset(getApplicationContext().getAssets(),
+                "Futura.ttc");
+        tv.setTypeface(font);
+        tv.setPadding(10, 0, 10, 0);
+        tv.setTextSize(15);
+        tv.setText(text);
+
+        return tv;
+
+    }
+
+    private void overrideFonts(final Context context, final View v) {
+        try {
+            if (v instanceof ViewGroup) {
+                ViewGroup vg = (ViewGroup) v;
+                for (int i = 0; i < vg.getChildCount(); i++) {
+                    View child = vg.getChildAt(i);
+                    overrideFonts(context, child);
+                }
+            } else if (v instanceof TextView || v instanceof EditText ) {
+                ((TextView) v).setTypeface(Typeface.createFromAsset(context.getAssets(), "Futura.tcc"));
             }
-        });
-
-        messagesIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent next = new Intent(EditProfileUpdateActivity.this, MessagesActivity.class);
-                startActivity(next);
-            }
-        });
-
-        conversationIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent next = new Intent(EditProfileUpdateActivity.this, ConversationStarterActivity.class);
-                startActivity(next);
-            }
-        });
-
-        learnMoreIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent next = new Intent(EditProfileUpdateActivity.this, LearnMoreActivity.class);
-                startActivity(next);
-            }
-        });
-
-        profileIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent next = new Intent(EditProfileUpdateActivity.this, EditProfileActivity.class);
-                startActivity(next);
-            }
-        });
-        /********************************************************/
-        /********************************************************/
-        /********************************************************/
-
+        } catch (Exception e) {
+        }
     }
 
     private static class MyArrayAdapter<String> extends ArrayAdapter<String> {
@@ -200,7 +206,7 @@ public class EditProfileUpdateActivity extends AppCompatActivity {
 
             supportAdapter = new MyArrayAdapter<>(getBaseContext(),
                     android.R.layout.simple_expandable_list_item_1, newSupportSkillsList);
-            supportSkillList.setAdapter(supportAdapter);
+            //supportSkillList.setAdapter(supportAdapter);
         }
     }
 
@@ -213,7 +219,7 @@ public class EditProfileUpdateActivity extends AppCompatActivity {
 
             conversationTopicsAdapter = new MyArrayAdapter<>(getBaseContext(),
                     android.R.layout.simple_expandable_list_item_1, newConversationTopicList);
-            conversationTopicList.setAdapter(conversationTopicsAdapter);
+            //conversationTopicList.setAdapter(conversationTopicsAdapter);
         }
     }
 }

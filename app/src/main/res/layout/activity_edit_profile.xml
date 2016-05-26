@@ -18,15 +18,28 @@
 
         android:background="#5d7074">
 
+        <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/photo"-->
+            <!--android:layout_alignParentTop="true"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_alignParentStart="true"-->
+            <!--android:src="@drawable/user"-->
+            <!--android:layout_marginBottom="20dp"/>-->
+
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/photo"
+            android:layout_marginRight="20dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/woman_icon"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:src="@drawable/user"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -35,24 +48,20 @@
             android:text="USERNAME"
             android:textSize="25dp"
             android:id="@+id/name"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/photo"
-            android:layout_toEndOf="@+id/photo"
-            android:textColor="#fafafa"/>
+            android:textColor="#fafafa"
+            android:layout_alignTop="@+id/photo"
+            android:layout_centerHorizontal="true" />
 
         <TextView
-            android:layout_marginTop="15dp"
             android:textSize="15sp"
-            android:layout_marginRight="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Enter a personalized quote about yourself that you'd like to make public"
             android:id="@+id/quoteView"
-            android:layout_below="@+id/name"
-            android:layout_toRightOf="@+id/photo"
-            android:layout_toEndOf="@+id/photo"
-            android:textColor="#fafafa"/>
+            android:textColor="#fafafa"
+            android:layout_centerVertical="true"
+            android:layout_alignLeft="@+id/name" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -60,15 +69,13 @@
             android:layout_height="wrap_content"
             android:text="Edit Profile"
             android:id="@+id/editButton"
-            android:layout_below="@+id/quoteView"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="-6dp"
-            android:layout_marginRight="-3dp"
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
             android:background="#bac4d1"
-            android:textColor="#fafafa"/>
+            android:textColor="#fafafa"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 
@@ -102,7 +109,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/supportSkillListView"
                 android:layout_below="@+id/textView17"
-                android:textColor="#6d6d6d"/>
+                android:textColor="#6d6d6d" />
 
             <TextView
                 android:layout_width="wrap_content"

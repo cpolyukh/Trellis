@@ -12,64 +12,60 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:id="@+id/profileHeader"
         android:layout_height="160dp"
-        android:paddingTop="20dp"
-
+        android:id="@+id/profileHeader"
         android:background="#5d7074">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/photo"
+            android:layout_marginRight="20dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/woman_icon"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:src="@drawable/user"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp" />
+
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="USERNAME"
-            android:textSize="25dp"
+            android:text="USER NAME"
             android:id="@+id/name"
-            android:layout_alignParentTop="true"
+            android:layout_alignTop="@+id/photo"
             android:layout_toRightOf="@+id/photo"
             android:layout_toEndOf="@+id/photo"
-            android:textColor="#fafafa"/>
+            android:textColor="#fafafa" />
 
         <TextView
-            android:layout_marginTop="15dp"
-            android:textSize="15sp"
-            android:layout_marginRight="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Enter a personalized quote about yourself that you'd like to make public"
+            android:text="Enter a personalized quote about yourself that you&apos;d like to make public"
             android:id="@+id/quoteView"
             android:layout_below="@+id/name"
             android:layout_toRightOf="@+id/photo"
             android:layout_toEndOf="@+id/photo"
-            android:textColor="#fafafa"/>
+            android:textColor="#fafafa" />
 
         <Button
-            style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Save Profile"
+            android:background="#bac4d1"
             android:id="@+id/editButton"
-            android:layout_below="@+id/quoteView"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginBottom="-6dp"
-            android:layout_marginRight="-3dp"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:background="#bac4d1"
-            android:textColor="#fafafa"/>
-
+            android:layout_marginBottom="-5dp"
+            android:layout_marginRight="-5dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:textColor="#fafafa" />
     </RelativeLayout>
 
     <ScrollView
@@ -78,6 +74,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:paddingBottom="72dp"
         android:id="@+id/profileView">
 
         <RelativeLayout
@@ -91,13 +88,13 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="SUPPORT SKILLS"
                 android:id="@+id/textView17"
-                android:layout_marginTop="24dp"
+                android:paddingTop="24dp"
                 android:textColor="#2b383f"
                 android:layout_below="@+id/line"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
 
-            <ListView
+            <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
@@ -106,9 +103,9 @@
                 android:textColor="#4d4d4d"/>
 
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:id="@+id/imageView2"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:id="@+id/addSkillBtn"
                 android:layout_alignBottom="@+id/addSkill"
                 android:layout_alignTop="@+id/addSkill"
                 android:layout_alignParentLeft="true"
@@ -121,8 +118,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/supportSkillListView"
                 android:id="@+id/addSkill"
-                android:layout_toRightOf="@id/imageView2"
+                android:layout_toRightOf="@id/addSkillBtn"
                 android:textSize="15dp"
+                android:imeOptions="actionSend"
                 android:hint="Type and press the &quot;+&quot; to add a skill"/>
 
             <TextView
@@ -132,16 +130,16 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="TALK TO ME ABOUT"
                 android:id="@+id/textView22"
-                android:layout_marginTop="24dp"
+                android:paddingTop="24dp"
                 android:textColor="#2b383f"
                 android:layout_below="@+id/addSkill"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
 
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:id="@+id/imageView3"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:id="@+id/addConvoBtn"
                 android:layout_alignBottom="@+id/addConversation"
                 android:layout_alignTop="@+id/addConversation"
                 android:layout_alignParentLeft="true"
@@ -153,15 +151,17 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/conversationTopicsListView"
                 android:id="@+id/addConversation"
-                android:layout_toRightOf="@id/imageView3"
+                android:layout_toRightOf="@id/addConvoBtn"
                 android:textSize="15dp"
+                android:imeOptions="actionSend"
                 android:hint="Type and press the &quot;+&quot; to add a topic"/>
 
-            <ListView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/conversationTopicsListView"
                 android:layout_below="@+id/textView22"
+                android:orientation="vertical"
                 android:textColor="#4d4d4d"/>
 
             <TextView
@@ -172,7 +172,7 @@
                 android:text="ABOUT ME"
                 android:layout_below="@+id/addConversation"
                 android:id="@+id/textView26"
-                android:layout_marginTop="24dp"
+                android:paddingTop="24dp"
                 android:textColor="#2b383f"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
@@ -189,7 +189,6 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:paddingLeft="10dp" />
-
 
         </RelativeLayout>
     </ScrollView>
