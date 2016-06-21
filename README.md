@@ -2,7 +2,23 @@
 
 Depression acts as one of the leading mental health diagnostics affecting college-aged students today. But with a societal stigma surrounding mental health and barriers to therapy, it is difficult for students to receive the support that they need to better manage their depressive state. Trellis is a mobile application that supports students by encouraging thoughtful, caring conversations and education about depression. Trellis is designed to connect those that want to get support, to those that want to give support.
 
-## Key Features / Screenshots
+Table of Contents
+=================
+
+  * [Key Features + Screenshots](#key-features)
+    * [Login Page](#login-page)
+    * [Welcome Page](#welcome-page)
+    * [Support (Giving Support)](#support-giving-support)
+    * [Support (Receiving Support)](#support-receiving-support)
+    * [Messages](#messages)
+    * [Message](#message)
+    * [Conversation Starters](#conversation-starters)
+    * [Learn More](#learn-more)
+    * [Settings](#settings)
+  * [Contributers](#contributers)
+  * [Awards](#awards)
+
+## Key Features
 
 ### Login Page
 ### <img src="screenshots/first_page.png" alt="login page screenshot" width="300">
@@ -44,10 +60,17 @@ This is a static page that includes a list of curated articles based off of what
 The settings page allows someone to edit their profile, as well as set whether they’re anonymous (but only if they are seeking support).
 
 ## Contributers 
-####Team TECK
+####Team [TECK](https://ischool.uw.edu/capstone/projects/2016/trellis-supporting-growth-depressed-college-aged-students-and-their-support)
 **T**amanh Nguyen -> Designer
+
 **E**den Ghirmai -> Developer
+
 **C**hristina Polyukh -> Developer
+
 **K**risten Wei -> Project Manager / Designer 
+
+##Awards
+#### [Research Award - iSchool Capstone Night 2016](https://ischool.uw.edu/news/2016/06/capstone-showcases-more-300-students-work)
+Recognized for the Research Award for the annual capstone night at the University of Washington's Information School
 
 
